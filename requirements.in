@@ -3,3 +3,4 @@ pyfritzhome
 python-decouple
 python-pushover
 sentry-sdk
+whitenoise

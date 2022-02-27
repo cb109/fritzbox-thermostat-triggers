@@ -36,3 +36,5 @@ urllib3==1.26.8
     # via
     #   requests
     #   sentry-sdk
+whitenoise==6.0.0
+    # via -r requirements.in

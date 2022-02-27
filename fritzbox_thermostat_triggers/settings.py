@@ -38,11 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
+    "fritzbox_thermostat_triggers.triggers",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -118,16 +121,24 @@ TIME_INPUT_FORMATS = ("%H:%M",)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+
+STATIC_ROOT = "public/"
 STATIC_URL = "static/"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGIN_REDIRECT_URL = "/admin/login/"
+
 FRITZBOX_HOST = config("FRITZBOX_HOST", default="", cast=str)
 FRITZBOX_USER = config("FRITZBOX_USER", default="", cast=str)
 FRITZBOX_PASSWORD = config("FRITZBOX_PASSWORD", default="", cast=str)
+
+TEMPERATURE_OFF = config("TEMPERATURE_OFF", default=126.5, cast=float)
+TEMPERATURE_FALLBACK = config("TEMPERATURE_FALLBACK", default=0, cast=float)
 
 PUSHOVER_USER_KEY = config("PUSHOVER_USER_KEY", default="", cast=str)
 PUSHOVER_API_TOKEN = config("PUSHOVER_API_TOKEN", default="", cast=str)
