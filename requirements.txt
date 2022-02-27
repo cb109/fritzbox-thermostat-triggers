@@ -7,7 +7,9 @@
 asgiref==3.5.0
     # via django
 certifi==2021.10.8
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 charset-normalizer==2.0.12
     # via requests
 django==4.0.2
@@ -24,9 +26,13 @@ requests==2.27.1
     # via
     #   pyfritzhome
     #   python-pushover
+sentry-sdk==1.5.6
+    # via -r requirements.in
 sqlparse==0.4.2
     # via django
 tzdata==2021.5
     # via django
 urllib3==1.26.8
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
