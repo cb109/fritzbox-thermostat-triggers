@@ -111,9 +111,11 @@ class Command(BaseCommand):
         now = timezone.localtime()
         within_last_hour = now - timedelta(minutes=60)
 
+        no_thermostats_fetched_yet = Thermostat.objects.count() == 0
+
         # Quick sanity check to save device battery life: If there are
         # no relevant Triggers at all, no need to talk to devices.
-        if not Trigger.objects.filter(
+        if not no_thermostats_fetched_yet and not Trigger.objects.filter(
             triggered=False, time__gte=within_last_hour, time__lte=now
         ):
             return
