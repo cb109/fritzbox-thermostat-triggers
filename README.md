@@ -1,0 +1,1 @@
+# fritzbox-thermostat-triggers
