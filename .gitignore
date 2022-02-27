@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # Custom
-venv/
-settings.ini
 Activate.ps1
+public/
+settings.ini
+venv/
