@@ -16,8 +16,14 @@ idna==3.3
     # via requests
 pyfritzhome==0.6.4
     # via -r requirements.in
+python-decouple==3.6
+    # via -r requirements.in
+python-pushover==0.4
+    # via -r requirements.in
 requests==2.27.1
-    # via pyfritzhome
+    # via
+    #   pyfritzhome
+    #   python-pushover
 sqlparse==0.4.2
     # via django
 tzdata==2021.5

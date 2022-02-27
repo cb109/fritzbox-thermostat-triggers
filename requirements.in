@@ -1,2 +1,4 @@
 django
 pyfritzhome
+python-decouple
+python-pushover
