@@ -1,19 +1,12 @@
-def _patch_pushover_old_ConfigParser_import():
-    import sys  # noqa
-    import configparser  # noqa
-
-    sys.modules["ConfigParser"] = configparser
-
-
-_patch_pushover_old_ConfigParser_import()  # noqa
-
 from datetime import timedelta
+from typing import Optional
+import http.client
+import urllib.parse
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from pushover import Client
 from pyfritzhome import Fritzhome
 from fritzbox_thermostat_triggers.triggers.models import Thermostat
 from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
@@ -51,14 +44,27 @@ def get_fritzbox_thermostat_devices():
     return [device for device in fritzbox.get_devices() if device.has_thermostat]
 
 
-def send_push_notification(message, title=None):
+def send_push_notification(message: str, title: Optional[str] = None):
     if not settings.PUSHOVER_USER_KEY or not settings.PUSHOVER_API_TOKEN:
         return
-    client = Client(
-        settings.PUSHOVER_USER_KEY,
-        api_token=settings.PUSHOVER_API_TOKEN,
+
+    # https://support.pushover.net/i44-example-code-and-pushover-libraries#python
+    conn = http.client.HTTPSConnection("api.pushover.net:443")
+    conn.request(
+        "POST",
+        "/1/messages.json",
+        urllib.parse.urlencode(
+            {
+                "message": message,
+                "title": title,
+                "token": settings.PUSHOVER_API_TOKEN,
+                "user": settings.PUSHOVER_USER_KEY,
+            }
+        ),
+        {"Content-type": "application/x-www-form-urlencoded"},
     )
-    client.send_message(message, title=title)
+    response = conn.getresponse()
+    return response
 
 
 def change_thermostat_target_temperature(
@@ -73,7 +79,12 @@ def change_thermostat_target_temperature(
         temperature=new_target_temperature,
         thermostat=thermostat,
         trigger=trigger,
+        triggered_at=timezone.localtime(),
     )
+
+    trigger.triggered = True
+    trigger.save(update_fields=["triggered"])
+
     if no_op:
         return
 
@@ -82,7 +93,7 @@ def change_thermostat_target_temperature(
 
     if notify:
         message = (
-            f"{thermostat.name} is now set to "
+            f"Triggered: {thermostat.name} is now set to "
             f"{describe_temperature(new_target_temperature)}"
         )
         send_push_notification(

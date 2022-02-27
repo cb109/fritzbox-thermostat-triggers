@@ -20,12 +20,8 @@ pyfritzhome==0.6.4
     # via -r requirements.in
 python-decouple==3.6
     # via -r requirements.in
-python-pushover==0.4
-    # via -r requirements.in
 requests==2.27.1
-    # via
-    #   pyfritzhome
-    #   python-pushover
+    # via pyfritzhome
 sentry-sdk==1.5.6
     # via -r requirements.in
 sqlparse==0.4.2
