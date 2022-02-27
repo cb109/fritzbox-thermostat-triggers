@@ -107,8 +107,16 @@ def change_thermostat_target_temperature(
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        # This command is assumed to be run at least once an hour, e.g. as a cronjob.
         now = timezone.localtime()
         within_last_hour = now - timedelta(minutes=60)
+
+        # Quick sanity check to save device battery life: If there are
+        # no relevant Triggers at all, no need to talk to devices.
+        if not Trigger.objects.filter(
+            triggered=False, time__gte=within_last_hour, time__lte=now
+        ):
+            return
 
         for device in get_fritzbox_thermostat_devices():
             # Create new Device if found.
@@ -128,7 +136,7 @@ class Command(BaseCommand):
             ):
                 no_op = False
                 if temperatures_equal(device.target_temperature, trigger.temperature):
-                    # Nothing to do: Spare the device request to save battery life.
+                    # Nothing to do: Spare the device request to save battery.
                     no_op = True
 
                 change_thermostat_target_temperature(
