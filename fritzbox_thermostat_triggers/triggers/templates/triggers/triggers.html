@@ -6,6 +6,9 @@
       <b>{{ trigger.thermostat.name }}</b><br>
       {{ trigger.temperature }} °C,
       {{ trigger.time|date:"d.m.Y, H:i" }}
+      {% if trigger.recurring %}
+        <i class="fa fa-repeat ml-2 mr-1"></i> {{ trigger.recur_on_label}}
+      {% endif %}
     </div>
   {% endfor %}
 {% endblock%}

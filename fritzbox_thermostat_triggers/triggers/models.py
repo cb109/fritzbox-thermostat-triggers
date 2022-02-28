@@ -47,5 +47,55 @@ class Trigger(BaseModel):
     )
     enabled = models.BooleanField(default=True)
 
+    recur_on_monday = models.BooleanField(default=False)
+    recur_on_tuesday = models.BooleanField(default=False)
+    recur_on_wednesday = models.BooleanField(default=False)
+    recur_on_thursday = models.BooleanField(default=False)
+    recur_on_friday = models.BooleanField(default=False)
+    recur_on_saturday = models.BooleanField(default=False)
+    recur_on_sunday = models.BooleanField(default=False)
+
+    @property
+    def weekday_flags(self):
+        return (
+            self.recur_on_monday,
+            self.recur_on_tuesday,
+            self.recur_on_wednesday,
+            self.recur_on_thursday,
+            self.recur_on_friday,
+            self.recur_on_saturday,
+            self.recur_on_sunday,
+        )
+
+    @property
+    def weekday_labels(self):
+        return (
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun",
+        )
+
+    @property
+    def recurring(self):
+        return any(self.weekday_flags)
+
+    def recurs_for_weekday_index(self, weekday_index: int) -> bool:
+        idx_to_recurs = {idx: flag for idx, flag in enumerate(self.weekday_flags)}
+        return idx_to_recurs[weekday_index]
+
+    @property
+    def recur_on_label(self):
+        return (", ").join(
+            [
+                label
+                for idx, label in enumerate(self.weekday_labels)
+                if self.recurs_for_weekday_index(idx)
+            ]
+        )
+
     def __str__(self):
         return f"Set {self.thermostat.name} at {self.time} to {self.temperature}"

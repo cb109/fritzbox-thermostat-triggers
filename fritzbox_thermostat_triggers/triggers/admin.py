@@ -36,14 +36,26 @@ class TriggerAdmin(BaseModelAdmin):
         "temperature",
         "time",
         "enabled",
+        "recurring",
+        "recur_on",
         "created_at",
         "updated_at",
     )
+
+    def recurring(self, trigger):
+        return trigger.recurring
+
+    recurring.boolean = True
 
     def label(self, trigger):
         return trigger.thermostat.name + (
             "" if not trigger.name else f": {trigger.name}"
         )
+
+    def recur_on(self, trigger):
+        if not trigger.recurring:
+            return ""
+        return trigger.recur_on_label
 
 
 admin.site.site_header = "fritzbox thermostat triggers"

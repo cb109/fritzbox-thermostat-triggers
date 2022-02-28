@@ -1,3 +1,4 @@
+from datetime import datetime
 from datetime import timedelta
 from typing import Optional
 import http.client
@@ -82,8 +83,9 @@ def change_thermostat_target_temperature(
         triggered_at=timezone.localtime(),
     )
 
-    trigger.enabled = False
-    trigger.save(update_fields=["enabled"])
+    if not trigger.recurring:
+        trigger.enabled = False
+        trigger.save(update_fields=["enabled"])
 
     if no_op:
         return
@@ -136,6 +138,10 @@ class Command(BaseCommand):
                 time__gte=within_last_hour,
                 time__lte=now,
             ):
+                if trigger.recurring:
+                    if not trigger.recurs_for_weekday_index(datetime.today().weekday()):
+                        continue
+
                 no_op = False
                 if temperatures_equal(device.target_temperature, trigger.temperature):
                     # Nothing to do: Spare the device request to save battery.
