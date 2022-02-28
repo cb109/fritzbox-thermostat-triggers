@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermostat Triggers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.2.2/dist/full.css">
+    <script type="text/javascript" src="https://cdn.tailwindcss.com/3.0.23"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <style>
+    .admin-link {
+      position: fixed;
+      right: 0;
+      margin-right: 16px;
+      z-index: 99;
+      transition: all .2s ease-in-out
+    }
+    .admin-link:hover {
+      transform: scale(1.2) rotate(90deg);
+    }
+    </style>
+  <body style="margin: 8px">
+    {% block navbar %}
+    <a
+      href="/admin/"
+      title="Admin"
+      class="admin-link"
+    >
+      <i class="fa-solid fa-lg fa-gear"></i>
+    </a>
+    {% endblock%}
+    {% block content %}{% endblock%}
+  </body>
+</html>

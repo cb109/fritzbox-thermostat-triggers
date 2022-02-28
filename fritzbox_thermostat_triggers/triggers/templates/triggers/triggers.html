@@ -1,0 +1,11 @@
+{% extends "triggers/base.html" %}
+
+{% block content %}
+  {% for trigger in triggers %}
+    <div>
+      <b>{{ trigger.thermostat.name }}</b><br>
+      {{ trigger.temperature }} °C,
+      {{ trigger.time|date:"d.m.Y, H:i" }}
+    </div>
+  {% endfor %}
+{% endblock%}
