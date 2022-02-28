@@ -1,14 +1,26 @@
 {% extends "triggers/base.html" %}
 
 {% block content %}
-  {% for trigger in triggers %}
-    <div>
+  <h2 class="text-xl">Once</h2>
+  {% for trigger in onetime_triggers %}
+    <div class="ml-4 mt-3">
       <b>{{ trigger.thermostat.name }}</b><br>
       {{ trigger.temperature }} °C,
       {{ trigger.time|date:"d.m.Y, H:i" }}
-      {% if trigger.recurring %}
-        <i class="fa fa-repeat ml-2 mr-1"></i> {{ trigger.recur_on_label}}
-      {% endif %}
     </div>
+  {% empty %}
+    -
   {% endfor %}
-{% endblock%}
+  <div class="my-4"></div>
+  <h2 class="text-xl">Recurring</h2>
+  {% for trigger in recurring_triggers %}
+    <div class="ml-4 mt-3">
+      <b>{{ trigger.thermostat.name }}</b><br>
+      {{ trigger.temperature }} °C,
+      {{ trigger.time|date:"d.m.Y, H:i" }}
+      <i class="fa fa-repeat ml-2 mr-1"></i> {{ trigger.recur_on_label}}
+    </div>
+  {% empty %}
+    -
+  {% endfor %}
+  {% endblock%}
