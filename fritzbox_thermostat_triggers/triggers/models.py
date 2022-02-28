@@ -37,6 +37,7 @@ class ThermostatLog(BaseModel):
 
 class Trigger(BaseModel):
     thermostat = models.ForeignKey("triggers.Thermostat", on_delete=models.CASCADE)
+    name = models.CharField(max_length=128, default="", blank=True)
     time = models.DateTimeField()
     temperature = models.FloatField(
         validators=[

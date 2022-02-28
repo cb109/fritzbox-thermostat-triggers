@@ -32,13 +32,18 @@ class ThermostatLogAdmin(BaseModelAdmin):
 
 class TriggerAdmin(BaseModelAdmin):
     list_display = (
-        "thermostat",
+        "label",
         "temperature",
         "time",
         "triggered",
         "created_at",
         "updated_at",
     )
+
+    def label(self, trigger):
+        return trigger.thermostat.name + (
+            "" if not trigger.name else f": {trigger.name}"
+        )
 
 
 admin.site.site_header = "fritzbox thermostat triggers"
