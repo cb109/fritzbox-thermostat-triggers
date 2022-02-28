@@ -45,7 +45,7 @@ class Trigger(BaseModel):
             MaxValueValidator(28.0),
         ],
     )
-    triggered = models.BooleanField(default=False)
+    enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Set {self.thermostat.name} at {self.time} to {self.temperature}"

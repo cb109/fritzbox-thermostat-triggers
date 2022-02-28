@@ -35,7 +35,7 @@ class TriggerAdmin(BaseModelAdmin):
         "label",
         "temperature",
         "time",
-        "triggered",
+        "enabled",
         "created_at",
         "updated_at",
     )

@@ -82,8 +82,8 @@ def change_thermostat_target_temperature(
         triggered_at=timezone.localtime(),
     )
 
-    trigger.triggered = True
-    trigger.save(update_fields=["triggered"])
+    trigger.enabled = False
+    trigger.save(update_fields=["enabled"])
 
     if no_op:
         return
@@ -116,7 +116,7 @@ class Command(BaseCommand):
         # Quick sanity check to save device battery life: If there are
         # no relevant Triggers at all, no need to talk to devices.
         if not no_thermostats_fetched_yet and not Trigger.objects.filter(
-            triggered=False, time__gte=within_last_hour, time__lte=now
+            enabled=True, time__gte=within_last_hour, time__lte=now
         ):
             return
 
@@ -131,7 +131,7 @@ class Command(BaseCommand):
 
             # Trigger untriggered Triggers that need triggering, d'uh!
             for trigger in Trigger.objects.filter(
-                triggered=False,
+                enabled=True,
                 thermostat=thermostat,
                 time__gte=within_last_hour,
                 time__lte=now,

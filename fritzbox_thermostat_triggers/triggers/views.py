@@ -6,7 +6,7 @@ from fritzbox_thermostat_triggers.triggers.models import Trigger
 
 @login_required
 def triggers(request):
-    triggers = Trigger.objects.filter(triggered=False).order_by(
+    triggers = Trigger.objects.filter(enabled=True).order_by(
         "thermostat__name", "temperature"
     )
     return render(request, "triggers/triggers.html", {"triggers": triggers})
