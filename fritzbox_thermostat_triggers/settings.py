@@ -131,7 +131,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = "/admin/login/"
+LOGIN_URL = "/admin/login/"
+LOGIN_REDIRECT_URL = "/triggers"
 
 FRITZBOX_HOST = config("FRITZBOX_HOST", default="", cast=str)
 FRITZBOX_USER = config("FRITZBOX_USER", default="", cast=str)
