@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils import timezone
 
 from fritzbox_thermostat_triggers.triggers.models import Thermostat
 from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
@@ -17,6 +18,7 @@ class ThermostatAdmin(BaseModelAdmin):
         "created_at",
         "updated_at",
     )
+    search_fields = ("name", "ain", "id")
 
 
 class ThermostatLogAdmin(BaseModelAdmin):
@@ -34,13 +36,19 @@ class TriggerAdmin(BaseModelAdmin):
     list_display = (
         "label",
         "temperature",
-        "time",
-        "enabled",
         "recurring",
-        "recur_on",
+        "time",
+        "at_time",
+        "enabled",
         "created_at",
         "updated_at",
     )
+    autocomplete_fields = ("thermostat",)
+
+    def at_time(self, trigger):
+        if trigger.recurring:
+            return trigger.get_recurring_time_label()
+        return trigger.get_formatted_time()
 
     def recurring(self, trigger):
         return trigger.recurring
@@ -51,11 +59,6 @@ class TriggerAdmin(BaseModelAdmin):
         return trigger.thermostat.name + (
             "" if not trigger.name else f": {trigger.name}"
         )
-
-    def recur_on(self, trigger):
-        if not trigger.recurring:
-            return ""
-        return trigger.recur_on_label
 
 
 admin.site.site_header = "fritzbox thermostat triggers"

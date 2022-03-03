@@ -1,5 +1,7 @@
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
 
 class BaseModel(models.Model):
@@ -15,7 +17,7 @@ class Thermostat(BaseModel):
     name = models.CharField(max_length=128, default="", blank=True)
 
     def __str__(self):
-        return f"{self.name} (AIN: '{self.ain}')"
+        return self.name or self.ain
 
 
 class ThermostatLog(BaseModel):
@@ -87,14 +89,23 @@ class Trigger(BaseModel):
         idx_to_recurs = {idx: flag for idx, flag in enumerate(self.weekday_flags)}
         return idx_to_recurs[weekday_index]
 
-    @property
-    def recur_on_label(self):
-        return (", ").join(
-            [
-                label
-                for idx, label in enumerate(self.weekday_labels)
-                if self.recurs_for_weekday_index(idx)
-            ]
+    def get_formatted_time(self, date_format: str = "%d.%m.%Y at %H:%M") -> str:
+        return timezone.make_naive(self.time, timezone.get_current_timezone()).strftime(
+            date_format
+        )
+
+    def get_recurring_time_label(self) -> str:
+        """Return str like 'Mon, Tue, Wed, Thu, Fri, Sat, Sun at 21:00'."""
+        return (
+            (", ").join(
+                [
+                    label
+                    for idx, label in enumerate(self.weekday_labels)
+                    if self.recurs_for_weekday_index(idx)
+                ]
+            )
+            + " at "
+            + self.get_formatted_time(date_format="%H:%M")
         )
 
     def __str__(self):
