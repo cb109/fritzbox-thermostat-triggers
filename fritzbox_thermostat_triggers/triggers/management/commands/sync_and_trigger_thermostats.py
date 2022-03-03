@@ -6,6 +6,7 @@ import urllib.parse
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from django.utils import timezone
 
 from pyfritzhome import Fritzhome
@@ -107,19 +108,68 @@ def change_thermostat_target_temperature(
         )
 
 
-class Command(BaseCommand):
-    def handle(self, *args, **options):
-        # This command is assumed to be run at least once an hour, e.g. as a cronjob.
-        now = timezone.localtime()
-        within_last_hour = now - timedelta(minutes=60)
+query_any_recur_on = (
+    Q(recur_on_monday=True)
+    | Q(recur_on_tuesday=True)
+    | Q(recur_on_wednesday=True)
+    | Q(recur_on_thursday=True)
+    | Q(recur_on_friday=True)
+    | Q(recur_on_saturday=True)
+    | Q(recur_on_sunday=True)
+)
 
-        no_thermostats_fetched_yet = Thermostat.objects.count() == 0
+
+def get_soon_non_recurring_triggers(recently: datetime, now: datetime) -> list:
+    return list(
+        Trigger.objects.exclude(query_any_recur_on).filter(
+            enabled=True, time__gte=recently, time__lte=now
+        )
+    )
+
+
+def get_soon_recurring_triggers(recently: datetime, now: datetime) -> list:
+    recurring_triggers = []
+
+    for trigger in Trigger.objects.filter(query_any_recur_on, enabled=True).distinct():
+        if not trigger.recurs_for_weekday_index(now.weekday()):
+            continue
+
+        # Ignore the specific date, check only time and weekday.
+        trigger_time_only = trigger.get_normalized_time().time()
+
+        if trigger_time_only < recently.time():
+            continue
+        if trigger_time_only > now.time():
+            continue
+        recurring_triggers.append(trigger)
+
+    return recurring_triggers
+
+
+class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument("--minutes", action="store", default=1, dest="minutes")
+
+    def handle(self, *args, **options):
+        # This command is assumed to be run regularly, e.g. as a cronjob.
+        # Trigger will be skipped if already executed within last interval.
+        interval_minutes = options["minutes"]
+
+        now = timezone.localtime()
+        within_last_interval = now - timedelta(minutes=interval_minutes)
+
+        non_recurring_triggers = get_soon_non_recurring_triggers(
+            recently=within_last_interval, now=now
+        )
+        recurring_triggers = get_soon_recurring_triggers(
+            recently=within_last_interval, now=now
+        )
+        triggers = non_recurring_triggers + recurring_triggers
+        thermostats_fetched_already = Thermostat.objects.count() > 0
 
         # Quick sanity check to save device battery life: If there are
         # no relevant Triggers at all, no need to talk to devices.
-        if not no_thermostats_fetched_yet and not Trigger.objects.filter(
-            enabled=True, time__gte=within_last_hour, time__lte=now
-        ):
+        if not triggers and thermostats_fetched_already:
             return
 
         for device in get_fritzbox_thermostat_devices():
@@ -132,15 +182,9 @@ class Command(BaseCommand):
                 thermostat.save(update_fields=["name"])
 
             # Trigger untriggered Triggers that need triggering, d'uh!
-            for trigger in Trigger.objects.filter(
-                enabled=True,
-                thermostat=thermostat,
-                time__gte=within_last_hour,
-                time__lte=now,
-            ):
-                if trigger.recurring:
-                    if not trigger.recurs_for_weekday_index(datetime.today().weekday()):
-                        continue
+            for trigger in triggers:
+                if trigger.has_already_executed_within(interval_minutes):
+                    continue
 
                 no_op = False
                 if temperatures_equal(device.target_temperature, trigger.temperature):

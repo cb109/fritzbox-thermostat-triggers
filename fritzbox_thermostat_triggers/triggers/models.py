@@ -1,7 +1,14 @@
+from datetime import datetime
+from datetime import timedelta
+
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
+
+
+DATETIME_FULL_FORMAT = "%d.%m.%Y at %H:%M"
+TIME_ONLY_FORMAT = "%H:%M"
 
 
 class BaseModel(models.Model):
@@ -89,10 +96,11 @@ class Trigger(BaseModel):
         idx_to_recurs = {idx: flag for idx, flag in enumerate(self.weekday_flags)}
         return idx_to_recurs[weekday_index]
 
-    def get_formatted_time(self, date_format: str = "%d.%m.%Y at %H:%M") -> str:
-        return timezone.make_naive(self.time, timezone.get_current_timezone()).strftime(
-            date_format
-        )
+    def get_normalized_time(self) -> datetime:
+        return timezone.make_naive(self.time, timezone.get_current_timezone())
+
+    def get_formatted_time(self, date_format: str = DATETIME_FULL_FORMAT) -> str:
+        return self.get_normalized_time().strftime(date_format)
 
     def get_recurring_time_label(self) -> str:
         """Return str like 'Mon, Tue, Wed, Thu, Fri, Sat, Sun at 21:00'."""
@@ -105,8 +113,13 @@ class Trigger(BaseModel):
                 ]
             )
             + " at "
-            + self.get_formatted_time(date_format="%H:%M")
+            + self.get_formatted_time(TIME_ONLY_FORMAT)
         )
 
+    def has_already_executed_within(self, minutes: int) -> bool:
+        threshold = timezone.localtime() - timedelta(minutes=minutes)
+        return self.logs.filter(triggered_at__gte=threshold)
+
     def __str__(self):
-        return f"Set {self.thermostat.name} at {self.time} to {self.temperature}"
+        formatted_time = self.get_formatted_time(TIME_ONLY_FORMAT)
+        return f"{self.thermostat.name} at {formatted_time} -> {self.temperature}"
