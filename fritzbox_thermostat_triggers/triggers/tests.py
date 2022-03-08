@@ -1,11 +1,10 @@
-from django.utils import timezone
 import logging
 
 from django.core.management import call_command
+from django.utils import timezone
 from model_bakery import baker
 
 from fritzbox_thermostat_triggers.triggers.models import Thermostat
-from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
 
 logger = logging.getLogger(__name__)
 
@@ -91,8 +90,12 @@ def test_command_sync_and_trigger_thermostats(db, monkeypatch):
         temperature=0.0,
         time=timezone.now(),
     )
-    assert ThermostatLog.objects.count() == 0
+    assert trigger.logs.count() == 0
 
+    # Ensure running the command multiple times in a short timespan
+    # does not actually do anything on top.
+    call_command("sync_and_trigger_thermostats")
+    call_command("sync_and_trigger_thermostats")
     call_command("sync_and_trigger_thermostats")
 
     # A new Device has been created by the sync, the existing one has
@@ -108,17 +111,43 @@ def test_command_sync_and_trigger_thermostats(db, monkeypatch):
     # The Trigger has also been executed, logged and deactivated.
     trigger.refresh_from_db()
     assert not trigger.enabled
-    assert ThermostatLog.objects.count() == 1
+    assert trigger.logs.count() == 1
 
-    log = ThermostatLog.objects.last()
+    log = trigger.logs.last()
     assert log.triggered_at is not None
     assert log.trigger == trigger
     assert not log.no_op
 
-    # Ensure running the command multiple times in a short timespan
-    # does not actually do anything.
+    # Running the sync against the same Trigger again won't do anything.
     call_command("sync_and_trigger_thermostats")
 
     trigger.refresh_from_db()
     assert not trigger.enabled
-    assert ThermostatLog.objects.count() == 1
+    assert trigger.logs.count() == 1
+
+    # This still holds true for a recurring Trigger.
+    trigger.recur_on_monday = True
+    trigger.recur_on_tuesday = True
+    trigger.recur_on_wednesday = True
+    trigger.recur_on_thursday = True
+    trigger.recur_on_friday = True
+    trigger.recur_on_saturday = True
+    trigger.recur_on_sunday = True
+    trigger.enabled = True
+    trigger.save()
+
+    call_command("sync_and_trigger_thermostats")
+
+    trigger.refresh_from_db()
+    assert trigger.enabled
+    assert trigger.logs.count() == 1
+
+    # If we remove the logs we can trigger it again though.
+    trigger.logs.all().delete()
+    assert trigger.logs.count() == 0
+
+    call_command("sync_and_trigger_thermostats")
+
+    trigger.refresh_from_db()
+    assert trigger.enabled
+    assert trigger.logs.count() == 1
