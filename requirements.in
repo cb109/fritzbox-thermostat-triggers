@@ -1,5 +1,8 @@
 django
+model_bakery
 pyfritzhome
+pytest
+pytest-django
 python-decouple
 sentry-sdk
 whitenoise
