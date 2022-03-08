@@ -152,3 +152,31 @@ if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN, integrations=[DjangoIntegration()], send_default_pii=True
     )
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "format": "{levelname} {asctime} {module} | {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "propagate": True,
+        },
+        "fritzbox_thermostat_triggers.triggers": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}

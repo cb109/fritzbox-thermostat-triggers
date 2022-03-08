@@ -2,6 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 from typing import Optional
 import http.client
+import logging
 import urllib.parse
 
 from django.conf import settings
@@ -13,6 +14,8 @@ from pyfritzhome import Fritzhome
 from fritzbox_thermostat_triggers.triggers.models import Thermostat
 from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
 from fritzbox_thermostat_triggers.triggers.models import Trigger
+
+logger = logging.getLogger(__name__)
 
 
 def describe_temperature(temperature):
@@ -75,6 +78,7 @@ def change_thermostat_target_temperature(
     trigger: Trigger,
     no_op: bool = False,
     notify: bool = True,
+    verbose: bool = False,
 ):
     ThermostatLog.objects.create(
         no_op=no_op,
@@ -85,6 +89,8 @@ def change_thermostat_target_temperature(
     )
 
     if not trigger.recurring:
+        if verbose:
+            logger.info(f"Disabling non-recurring trigger {trigger}")
         trigger.enabled = False
         trigger.save(update_fields=["enabled"])
 
@@ -94,11 +100,16 @@ def change_thermostat_target_temperature(
     fritzbox = get_fritzbox_connection()
     fritzbox.set_target_temperature(thermostat.ain, new_target_temperature)
 
+    message = (
+        f"Triggered: {thermostat.name} is now set to "
+        f"{describe_temperature(new_target_temperature)}"
+    )
+    if verbose:
+        logger.info(message)
+
     if notify:
-        message = (
-            f"Triggered: {thermostat.name} is now set to "
-            f"{describe_temperature(new_target_temperature)}"
-        )
+        if verbose:
+            logger.info("Sending PUSH notification")
         send_push_notification(
             message,
             title=(
@@ -149,11 +160,15 @@ def get_soon_recurring_triggers(recently: datetime, now: datetime) -> list:
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--minutes", action="store", default=1, dest="minutes")
+        parser.add_argument(
+            "--verbose", action="store_true", default=False, dest="verbose"
+        )
 
     def handle(self, *args, **options):
         # This command is assumed to be run regularly, e.g. as a cronjob.
         # Trigger will be skipped if already executed within last interval.
         interval_minutes = options["minutes"]
+        verbose = options["verbose"]
 
         now = timezone.localtime()
         within_last_interval = now - timedelta(minutes=interval_minutes)
@@ -170,30 +185,50 @@ class Command(BaseCommand):
         # Quick sanity check to save device battery life: If there are
         # no relevant Triggers at all, no need to talk to devices.
         if not triggers and thermostats_fetched_already:
+            if verbose:
+                logger.info("No Triggers found, Thermostats seem okay, do nothing")
             return
 
         for device in get_fritzbox_thermostat_devices():
             # Create new Device if found.
             thermostat, created = Thermostat.objects.get_or_create(ain=device.ain)
+            if created and verbose:
+                logger.info(f"New Thermostat created: {thermostat}")
 
             # Update name to reflect eventual changes from the fritzbox admin UI.
             if created or thermostat.name != device.name:
+                old_name = thermostat.name
                 thermostat.name = device.name
                 thermostat.save(update_fields=["name"])
+                if verbose:
+                    logger.info(
+                        f"Thermostat name updated: {old_name} -> {thermostat.name}"
+                    )
 
             # Trigger untriggered Triggers that need triggering, d'uh!
             for trigger in triggers:
                 if trigger.has_already_executed_within(interval_minutes):
+                    if verbose:
+                        logger.info(
+                            f"{trigger} already executed recently, skipping it..."
+                        )
                     continue
 
                 no_op = False
                 if temperatures_equal(device.target_temperature, trigger.temperature):
                     # Nothing to do: Spare the device request to save battery.
                     no_op = True
+                    if verbose:
+                        logger.info(
+                            f"{trigger} target temperature {trigger.temperature} "
+                            f"already reached on {device}, not sending actual "
+                            f"request to save some battery..."
+                        )
 
                 change_thermostat_target_temperature(
                     new_target_temperature=trigger.temperature,
                     no_op=no_op,
                     thermostat=thermostat,
                     trigger=trigger,
+                    verbose=verbose,
                 )
