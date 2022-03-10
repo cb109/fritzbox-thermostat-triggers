@@ -159,7 +159,9 @@ def get_soon_recurring_triggers(recently: datetime, now: datetime) -> list:
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument("--minutes", action="store", default=1, dest="minutes")
+        parser.add_argument(
+            "--minutes", action="store", default=1, dest="minutes", type=int
+        )
         parser.add_argument(
             "--verbose", action="store_true", default=False, dest="verbose"
         )
