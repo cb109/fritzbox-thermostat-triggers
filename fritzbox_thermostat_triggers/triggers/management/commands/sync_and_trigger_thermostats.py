@@ -167,8 +167,8 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        # This command is assumed to be run regularly, e.g. as a cronjob.
-        # Trigger will be skipped if already executed within last interval.
+        # This command is assumed to be run every minute as a cronjob.
+        # Triggers are skipped if already executed within last interval.
         interval_minutes = options["minutes"]
         verbose = options["verbose"]
 
@@ -208,7 +208,8 @@ class Command(BaseCommand):
                     )
 
             # Trigger untriggered Triggers that need triggering, d'uh!
-            for trigger in triggers:
+            thermostat_triggers = [t for t in triggers if t.thermostat == thermostat]
+            for trigger in thermostat_triggers:
                 if trigger.has_already_executed_within(interval_minutes):
                     if verbose:
                         logger.info(
