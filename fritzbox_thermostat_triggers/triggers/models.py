@@ -121,5 +121,7 @@ class Trigger(BaseModel):
         return self.logs.filter(triggered_at__gte=threshold)
 
     def __str__(self):
-        formatted_time = self.get_formatted_time(TIME_ONLY_FORMAT)
+        formatted_time = self.get_formatted_time(
+            TIME_ONLY_FORMAT if self.recurring else DATETIME_FULL_FORMAT
+        )
         return f"{self.thermostat.name} at {formatted_time} -> {self.temperature}"
