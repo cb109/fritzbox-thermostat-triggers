@@ -14,12 +14,17 @@ class BaseModelAdmin(admin.ModelAdmin):
 class ThermostatAdmin(BaseModelAdmin):
     list_display = (
         "name",
+        "type",
         "ain",
         "created_at",
         "updated_at",
     )
     search_fields = ("name", "ain", "id")
 
+    def type(self, thermostat):
+        if thermostat.ain.startswith("grp"):
+            return "GROUP"
+        return ""
 
 class ThermostatLogAdmin(BaseModelAdmin):
     list_display = (
