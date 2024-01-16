@@ -35,10 +35,10 @@ class ThermostatLogAdmin(BaseModelAdmin):
 class TriggerAdmin(BaseModelAdmin):
     list_display = (
         "label",
-        "temperature",
-        "recurring",
-        "at_time",
         "enabled",
+        "temperature",
+        "at_time",
+        "recurring",
         "created_at",
         "updated_at",
     )
