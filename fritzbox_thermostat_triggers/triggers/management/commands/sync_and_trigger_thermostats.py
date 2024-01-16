@@ -182,7 +182,7 @@ class Command(BaseCommand):
             recently=within_last_interval, now=now
         )
         triggers = non_recurring_triggers + recurring_triggers
-        thermostats_fetched_already = Thermostat.objects.count() > 0
+        thermostats_fetched_already: bool = Thermostat.objects.count() > 0
 
         # Quick sanity check to save device battery life: If there are
         # no relevant Triggers at all, no need to talk to devices.
@@ -210,10 +210,11 @@ class Command(BaseCommand):
             # Trigger untriggered Triggers that need triggering, d'uh!
             thermostat_triggers = [t for t in triggers if t.thermostat == thermostat]
             for trigger in thermostat_triggers:
-                if trigger.has_already_executed_within(interval_minutes):
+                if trigger.recurring and trigger.has_already_executed_within(interval_minutes):
                     if verbose:
                         logger.info(
-                            f"{trigger} already executed recently, skipping it..."
+                            f"Recurring {trigger} already executed recently, "
+                            f"skipping it..."
                         )
                     continue
 
