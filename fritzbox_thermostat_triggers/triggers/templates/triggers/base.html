@@ -1,34 +1,84 @@
 <!doctype html>
-<html>
+<html data-theme="light">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thermostat Triggers</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.2.2/dist/full.css">
-    <script type="text/javascript" src="https://cdn.tailwindcss.com/3.0.23"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   </head>
   <style>
-    .admin-link {
+    /* Green Light scheme (Default) */
+    /* Can be forced with data-theme="light" */
+    [data-theme="light"],
+    :root:not([data-theme="dark"]) {
+      --primary: #43a047;
+      --primary-hover: #388e3c;
+      --primary-focus: rgba(67, 160, 71, 0.125);
+      --primary-inverse: #FFF;
+    }
+
+    /* Green Dark scheme (Auto) */
+    /* Automatically enabled if user has Dark mode enabled */
+    @media only screen and (prefers-color-scheme: dark) {
+      :root:not([data-theme]) {
+        --primary: #43a047;
+        --primary-hover: #4caf50;
+        --primary-focus: rgba(67, 160, 71, 0.25);
+        --primary-inverse: #FFF;
+      }
+    }
+
+    /* Green Dark scheme (Forced) */
+    /* Enabled if forced with data-theme="dark" */
+    [data-theme="dark"] {
+      --primary: #43a047;
+      --primary-hover: #4caf50;
+      --primary-focus: rgba(67, 160, 71, 0.25);
+      --primary-inverse: #FFF;
+    }
+
+    /* Green (Common styles) */
+    :root {
+      --form-element-active-border-color: var(--primary);
+      --form-element-focus-color: var(--primary-focus);
+      --switch-color: var(--primary-inverse);
+      --switch-checked-background-color: var(--primary);
+
+      --spacing: .75rem;
+      --block-spacing-vertical: .75rem;
+      --block-spacing-horizontal: 1.5rem;
+    }
+
+    .ml-1 {
+      margin-left: var(--spacing);
+    }
+
+    .mr-1 {
+      margin-right: var(--spacing);
+    }
+
+    {% comment %} .admin-link {
       position: fixed;
-      right: 0;
-      margin-right: 16px;
+      top: 16px;
+      right: 16px;
       z-index: 99;
       transition: all .2s ease-in-out
     }
+
     .admin-link:hover {
       transform: scale(1.2) rotate(90deg);
-    }
+    } {% endcomment %}
     </style>
-  <body style="margin: 8px">
+  <body>
     {% block navbar %}
-    <a
+    {% comment %} <a
       href="/admin/"
       title="Admin"
       class="admin-link"
     >
       <i class="fa-solid fa-lg fa-gear"></i>
-    </a>
+    </a> {% endcomment %}
     {% endblock%}
     {% block content %}{% endblock%}
   </body>
