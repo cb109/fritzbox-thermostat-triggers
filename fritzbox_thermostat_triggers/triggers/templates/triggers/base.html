@@ -6,6 +6,7 @@
     <title>Thermostat Triggers</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   </head>
   <style>
     /* Green Light scheme (Default) */
@@ -58,7 +59,7 @@
       margin-right: var(--spacing);
     }
   </style>
-  <body>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="container">
       {% block navbar %}
       <div
