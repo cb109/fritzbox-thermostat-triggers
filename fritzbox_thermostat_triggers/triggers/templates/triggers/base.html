@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   </head>
   <style>
+    {% comment %} * { outline: 1px solid red; } {% endcomment %}
+
     [dbg] {
       outline: 1px solid red;
     }
@@ -62,11 +64,20 @@
     .mr-1 {
       margin-right: var(--spacing);
     }
+
+    .theme-toggle-button.dark i {
+      transform: rotate(180deg);
+    }
+
+    .navbar a:hover i {
+      color: #4caf50;
+    }
   </style>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="container">
       {% block navbar %}
       <div
+        class="navbar"
         style="
           display: flex;
           align-items: baseline;
@@ -75,15 +86,41 @@
       >
         <!-- Title -->
         <h4 style="margin-bottom: 0; margin-right: auto;">
+          <i
+            class="fa fa-fa fa-lg fa-fire"
+            style="margin-right: 0.33rem; color: #ffb300;"
+          ></i>
           Thermostat Triggers
         </h4>
-        <!-- Admin -->
+        <!-- GitHub -->
         <small style="margin-right: 1rem">
-          <a href="/admin" class="secondary">Admin</a>
+          <a
+            href="https://github.com/cb109/fritzbox-thermostat-triggers"
+            class="secondary"
+            title="See code of project on GitHub"
+          >
+            <i class="fa fa-fw fa-code-branch"></i>
+          </a>
+        </small>
+        <!-- Admin -->
+        <small
+          style="margin-right: 1rem"
+          title="Got to admin area"
+        >
+          <a href="/admin" class="secondary">
+            <i class="fa fa-fw fa-cog"></i>
+          </a>
         </small>
         <!-- Light/Dark Theme -->
         <small>
-          <a href="#" class="secondary" onclick="swapTheme(this)">Light</a>
+          <a
+            href="#"
+            class="secondary theme-toggle-button"
+            onclick="swapTheme(this)"
+            title="Toggle light/dark theme""
+          >
+            <i class="fa fa-fw fa-circle-half-stroke"></i>
+          </a>
         </small>
       </div>
       {% endblock%}
@@ -94,7 +131,11 @@
     function swapTheme(linkElement) {
       const html = document.querySelector('html');
       html.dataset.theme = html.dataset.theme == 'light' ? 'dark' : 'light';
-      linkElement.innerText = html.dataset.theme == 'light' ? 'Light' : 'Dark';
+      if (html.dataset.theme == 'light') {
+        linkElement.classList.remove('dark');
+      } else {
+        linkElement.classList.add('dark');
+      }
     }
   </script>
 </html>

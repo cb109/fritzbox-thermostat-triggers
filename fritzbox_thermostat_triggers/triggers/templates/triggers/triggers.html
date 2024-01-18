@@ -14,6 +14,7 @@
 {% if recurring_triggers %}
   <h5 style="opacity: 0.5; margin-top: 1.2rem; margin-bottom: 1.2rem">
     Recurring
+    {% comment %} <i class="fa fa-fw fa-repeat" style="margin-left: 0.25rem;"></i> {% endcomment %}
   </h5>
   {% for trigger in recurring_triggers %}
     {% include "triggers/_trigger_card.html" with trigger=trigger only %}

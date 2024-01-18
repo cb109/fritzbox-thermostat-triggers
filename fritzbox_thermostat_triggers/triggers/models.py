@@ -103,14 +103,17 @@ class Trigger(BaseModel):
 
     def get_recurring_time_label(self) -> str:
         """Return str like 'Mon, Tue, Wed, Thu, Fri, Sat, Sun at 21:00'."""
+        days = [
+            label
+            for idx, label in enumerate(self.weekday_labels)
+            if self.recurs_for_weekday_index(idx)
+        ]
+        if len(days) == 7:
+            days_description = "Every day"
+        else:
+            days_description = (", ").join(days)
         return (
-            (", ").join(
-                [
-                    label
-                    for idx, label in enumerate(self.weekday_labels)
-                    if self.recurs_for_weekday_index(idx)
-                ]
-            )
+            days_description
             + " at "
             + self.get_formatted_time(TIME_ONLY_FORMAT)
         )
