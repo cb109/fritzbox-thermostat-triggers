@@ -1,13 +1,20 @@
 <article>
   <fieldset style="margin-bottom: 0">
     <div style="display: flex; flex-wrap: wrap; align-items: center;">
-      <label>
-        <input type="checkbox" name="active" role="switch" checked>
+      <input
+        id="checkbox-enabled-{{ trigger.id }}"
+        type="checkbox"
+        name="enabled"
+        role="switch"
+        style="transform: scale(1.5); margin-right: 0.66em;"
+        {% if trigger.enabled %}checked{% endif %}
+      >
+      <label for="checkbox-enabled-{{ trigger.id }}">
+        <div class="headings mr-1" style="margin-left: 1em; margin-bottom: 0;">
+          <h4>{{ trigger.thermostat.name }}</h4>
+          <h5>{{ trigger.name }}</h5>
+        </div>
       </label>
-      <div class="headings mr-1" style="margin-left: 1em; margin-bottom: 0;">
-        <h4>{{ trigger.thermostat.name }}</h4>
-        <h5>{{ trigger.name }}</h5>
-      </div>
       <div style="
           flex-grow: 1;
           display: flex;

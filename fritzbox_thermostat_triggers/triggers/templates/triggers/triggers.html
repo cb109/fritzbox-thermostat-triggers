@@ -2,37 +2,22 @@
 
 {% block content %}
 
-<main class="container">
-  <h5 style="margin-bottom: 1.2rem">Thermostat Triggers</h5>
+{% if onetime_triggers %}
+  <h5 style="opacity: 0.5; margin-bottom: 1.2rem">
+    Once
+  </h5>
+  {% for trigger in onetime_triggers %}
+    {% include "triggers/trigger_card.html" with trigger=trigger only %}
+  {% endfor %}
+{% endif %}
 
-  {% if onetime_triggers %}
-    <h3 style="margin-bottom: 1.2rem"><kbd>Once</kbd></h3>
-    {% for trigger in onetime_triggers %}
-      {% include "triggers/trigger_card.html" with trigger=trigger only %}
-    {% endfor %}
-  {% endif %}
-
-  {% if recurring_triggers %}
-    <h3 style="margin-top: 1.2rem; margin-bottom: 1.2rem"><kbd>Recurring</kbd></h3>
-    {% for trigger in recurring_triggers %}
-      {% include "triggers/trigger_card.html" with trigger=trigger only %}
-    {% endfor %}
-  {% endif %}
-
-</main>
+{% if recurring_triggers %}
+  <h5 style="opacity: 0.5; margin-top: 1.2rem; margin-bottom: 1.2rem">
+    Recurring
+  </h5>
+  {% for trigger in recurring_triggers %}
+    {% include "triggers/trigger_card.html" with trigger=trigger only %}
+  {% endfor %}
+{% endif %}
 
 {% endblock%}
-
-{% comment %}
-  <div class="my-4"></div>
-  <h2 class="text-xl">Recurring</h2>
-  {% for trigger in recurring_triggers %}
-    <div class="ml-4 mt-3">
-      <b>{{ trigger.thermostat.name }}</b><br>
-      {{ trigger.temperature }} °C,
-      {{ trigger.time|date:"d.m.Y, H:i" }}
-      <i class="fa fa-repeat ml-2 mr-1"></i> {{ trigger.recur_on_label}}
-    </div>
-  {% empty %}
-  {% endfor %}
-  {% endblock%} {% endcomment %}
