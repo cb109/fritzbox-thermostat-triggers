@@ -57,54 +57,32 @@
     .mr-1 {
       margin-right: var(--spacing);
     }
-
-    {% comment %} .admin-link {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 99;
-      transition: all .2s ease-in-out
-    }
-
-    .admin-link:hover {
-      transform: scale(1.2) rotate(90deg);
-    } {% endcomment %}
   </style>
   <body>
     <main class="container">
-    {% block navbar %}
-    {% comment %} <a
-      href="/admin/"
-      title="Admin"
-      class="admin-link"
-    >
-      <i class="fa-solid fa-lg fa-gear"></i>
-    </a> {% endcomment %}
-
-    <div
-      style="
-        display: flex;
-        align-items: baseline;
-      "
-    >
-      <!-- Title -->
-      <h4 style="margin-bottom: 0; margin-right: auto;">
-        Thermostat Triggers
-      </h4>
-      <!-- Admin -->
-      <small style="margin-right: 1em">
-        <a href="/admin" class="secondary">Admin</a>
-      </small>
-      <!-- Theme -->
-      <small>
-        <a href="#" class="secondary" onclick="swapTheme(this)">Light</a>
-      </small>
-    </div>
-    {% endblock%}
-
-    {% block content %}
-    {% endblock%}
-
+      {% block navbar %}
+      <div
+        style="
+          display: flex;
+          align-items: baseline;
+          margin-bottom: 1rem;
+        "
+      >
+        <!-- Title -->
+        <h4 style="margin-bottom: 0; margin-right: auto;">
+          Thermostat Triggers
+        </h4>
+        <!-- Admin -->
+        <small style="margin-right: 1rem">
+          <a href="/admin" class="secondary">Admin</a>
+        </small>
+        <!-- Light/Dark Theme -->
+        <small>
+          <a href="#" class="secondary" onclick="swapTheme(this)">Light</a>
+        </small>
+      </div>
+      {% endblock%}
+      {% block content %}{% endblock%}
     </main>
   </body>
   <script>
