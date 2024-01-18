@@ -16,6 +16,8 @@ class ThermostatAdmin(BaseModelAdmin):
         "name",
         "type",
         "ain",
+    )
+    readonly_fields = (
         "created_at",
         "updated_at",
     )
@@ -32,10 +34,11 @@ class ThermostatLogAdmin(BaseModelAdmin):
         "trigger",
         "triggered_at",
         "temperature",
+    )
+    readonly_fields = (
         "created_at",
         "updated_at",
     )
-
 
 class TriggerAdmin(BaseModelAdmin):
     list_display = (
@@ -44,6 +47,8 @@ class TriggerAdmin(BaseModelAdmin):
         "temperature",
         "at_time",
         "recurring",
+    )
+    readonly_fields = (
         "created_at",
         "updated_at",
     )
@@ -65,7 +70,7 @@ class TriggerAdmin(BaseModelAdmin):
         return trigger.thermostat.name
 
 
-admin.site.site_header = "fritzbox thermostat triggers"
+admin.site.site_header = "Thermostat Triggers"
 admin.site.register(Thermostat, ThermostatAdmin)
 admin.site.register(ThermostatLog, ThermostatLogAdmin)
 admin.site.register(Trigger, TriggerAdmin)
