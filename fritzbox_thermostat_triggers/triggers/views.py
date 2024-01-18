@@ -12,9 +12,7 @@ from fritzbox_thermostat_triggers.triggers.models import Trigger
 def list_triggers(request):
     theme : str = request.session.get("theme", "light") # Or 'dark'.
 
-    triggers = Trigger.objects.order_by(
-        "time", "thermostat__name", "temperature"
-    )
+    triggers = Trigger.objects.order_by("thermostat__name", "time")
     onetime_triggers = [trigger for trigger in triggers if not trigger.recurring]
     recurring_triggers = [trigger for trigger in triggers if trigger.recurring]
 
