@@ -34,7 +34,6 @@ class ThermostatLog(BaseModel):
     trigger = models.ForeignKey(
         "triggers.Trigger", null=True, related_name="logs", on_delete=models.CASCADE
     )
-    triggered_at = models.TimeField(blank=True, null=True)
     temperature = models.FloatField()
 
     no_op = models.BooleanField(default=False)
@@ -118,7 +117,7 @@ class Trigger(BaseModel):
 
     def has_already_executed_within(self, minutes: int) -> bool:
         threshold = timezone.localtime() - timedelta(minutes=minutes)
-        return self.logs.filter(triggered_at__gte=threshold)
+        return self.logs.filter(created_at__gte=threshold)
 
     def __str__(self):
         formatted_time = self.get_formatted_time(

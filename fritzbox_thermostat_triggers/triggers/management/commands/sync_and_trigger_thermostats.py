@@ -85,7 +85,6 @@ def change_thermostat_target_temperature(
         temperature=new_target_temperature,
         thermostat=thermostat,
         trigger=trigger,
-        triggered_at=timezone.localtime(),
     )
 
     if not trigger.recurring:

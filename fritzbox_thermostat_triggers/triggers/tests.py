@@ -114,7 +114,7 @@ def test_command_sync_and_trigger_thermostats(db, monkeypatch):
     assert trigger.logs.count() == 1
 
     log = trigger.logs.last()
-    assert log.triggered_at is not None
+    assert log.created_at is not None
     assert log.trigger == trigger
     assert not log.no_op
 

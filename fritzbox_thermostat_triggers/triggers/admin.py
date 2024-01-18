@@ -30,9 +30,9 @@ class ThermostatAdmin(BaseModelAdmin):
 
 class ThermostatLogAdmin(BaseModelAdmin):
     list_display = (
+        "created_at",
         "thermostat",
         "trigger",
-        "triggered_at",
         "temperature",
     )
     readonly_fields = (
