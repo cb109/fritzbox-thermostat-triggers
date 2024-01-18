@@ -69,7 +69,7 @@
     .admin-link:hover {
       transform: scale(1.2) rotate(90deg);
     } {% endcomment %}
-    </style>
+  </style>
   <body>
     {% block navbar %}
     {% comment %} <a
@@ -79,7 +79,20 @@
     >
       <i class="fa-solid fa-lg fa-gear"></i>
     </a> {% endcomment %}
+
+    <div style="display: flex; justify-content: flex-end;">
+      <small style="margin-right: 1em; margin-top: 0.66em;">
+        <a href="#" class="secondary" onclick="swapTheme(this)">Light</a>
+      </small>
+    </div>
     {% endblock%}
     {% block content %}{% endblock%}
   </body>
+  <script>
+    function swapTheme(linkElement) {
+      const html = document.querySelector('html');
+      html.dataset.theme = html.dataset.theme == 'light' ? 'dark' : 'light';
+      linkElement.innerText = html.dataset.theme == 'light' ? 'Light' : 'Dark';
+    }
+  </script>
 </html>
