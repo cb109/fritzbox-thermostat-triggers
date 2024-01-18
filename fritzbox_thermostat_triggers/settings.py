@@ -182,3 +182,5 @@ LOGGING = {
         },
     },
 }
+
+SESSION_COOKIE_AGE : int = 60 * 60 * 24 * 365 * 100  # 100 years.
