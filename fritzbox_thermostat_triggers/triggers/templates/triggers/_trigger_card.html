@@ -1,4 +1,22 @@
-<article id="trigger-{{ trigger.id }}">
+<article
+  id="trigger-{{ trigger.id }}"
+  style="position: relative"
+>
+  {% if message %}
+    <div
+      class="fade-out--slow"
+      style="
+        position: absolute;
+        bottom: -5px;
+        right: 0;
+        font-size: 0.6rem;
+      "
+    >
+      <mark>
+        {{ message|safe }}
+      </mark>
+    </div>
+  {% endif %}
   <fieldset style="margin-bottom: 0">
     <div style="display: flex; flex-wrap: wrap; align-items: center;">
       <input
@@ -9,12 +27,16 @@
         style="transform: scale(1.5); margin-left: 0.5rem; margin-right: 1rem;"
         {% if trigger.enabled %}checked{% endif %}
         hx-post="/trigger/{{ trigger.id }}/toggle"
-        hx-swap="none"
+        hx-target="#trigger-{{ trigger.id }}"
+        hx-swap="outerHTML"
+        hx-trigger="click delay:200ms"
       >
       <label
         for="checkbox-enabled-{{ trigger.id }}"
         hx-post="/trigger/{{ trigger.id }}/toggle"
-        hx-swap="none"
+        hx-target="#trigger-{{ trigger.id }}"
+        hx-swap="outerHTML"
+        hx-trigger="click delay:200ms"
       >
         <div style="margin-left: 1rem">
           <div class="headings mr-1" style="margin-bottom: 0;">
@@ -29,7 +51,12 @@
               <i class="fa fa-fw fa-repeat" style="margin-right: 0.2rem;"></i>
               {{ trigger.get_recurring_time_label }}
               {% else %}
-              {{ trigger.get_formatted_time }}
+              <span
+                {% if trigger.outdated %}
+                  style="color: #fb8c00"
+                  title="This is outdated"
+                {% endif %}
+              >{{ trigger.get_formatted_time }}</span>
             {% endif %}
           </div>
         </div>

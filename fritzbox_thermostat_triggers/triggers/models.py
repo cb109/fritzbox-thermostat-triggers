@@ -88,7 +88,11 @@ class Trigger(BaseModel):
         )
 
     @property
-    def recurring(self):
+    def outdated(self) -> bool:
+        return self.time < timezone.localtime()
+
+    @property
+    def recurring(self) -> bool:
         return any(self.weekday_flags)
 
     def recurs_for_weekday_index(self, weekday_index: int) -> bool:

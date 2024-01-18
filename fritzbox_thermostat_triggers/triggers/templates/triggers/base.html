@@ -74,6 +74,16 @@
     .navbar a:hover i {
       color: #4caf50;
     }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      66% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .fade-out--slow {
+      animation: fadeOut 20s ease-in;
+      opacity: 0;
+    }
   </style>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="container" style="max-width: 900px">
@@ -92,7 +102,11 @@
             class="fa fa-fa fa-lg fa-fire"
             style="margin-right: 0.33rem; color: #ffb300;"
           ></i>
-          Thermostat Triggers
+          <a
+            href="{% url 'list-triggers' %}"
+            style="color: initial"
+            title="Home"
+          >Thermostat Triggers</a>
         </h4>
         <!-- GitHub -->
         <small style="margin-right: 1rem">
@@ -101,7 +115,7 @@
             class="secondary"
             title="See code of project on GitHub"
           >
-            <i class="fa fa-fw fa-code-branch"></i>
+            <i class="fa fa-fw fa-code"></i>
           </a>
         </small>
         <!-- Admin -->
