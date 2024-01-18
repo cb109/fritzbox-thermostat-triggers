@@ -1,5 +1,7 @@
 <!doctype html>
-<html data-theme="light">
+<html
+  data-theme="{{ theme|default_if_none:"light" }}"
+>
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,9 +116,8 @@
         <!-- Light/Dark Theme -->
         <small>
           <a
-            href="#"
-            class="secondary theme-toggle-button"
-            onclick="swapTheme(this)"
+            href="/theme/toggle"
+            class="secondary theme-toggle-button {{ theme|default_if_none:"light" }}"
             title="Toggle light/dark theme""
           >
             <i class="fa fa-fw fa-circle-half-stroke"></i>
@@ -127,15 +128,4 @@
       {% block content %}{% endblock%}
     </main>
   </body>
-  <script>
-    function swapTheme(linkElement) {
-      const html = document.querySelector('html');
-      html.dataset.theme = html.dataset.theme == 'light' ? 'dark' : 'light';
-      if (html.dataset.theme == 'light') {
-        linkElement.classList.remove('dark');
-      } else {
-        linkElement.classList.add('dark');
-      }
-    }
-  </script>
 </html>
