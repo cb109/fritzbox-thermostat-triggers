@@ -18,7 +18,10 @@
       >
         <div class="headings mr-1" style="margin-left: 1rem; margin-bottom: 0;">
           <h4>{{ trigger.thermostat.name }}</h4>
-          <h5>{{ trigger.name }}</h5>
+          <h5>
+            {{ trigger.name }}
+            <i class="fa fa-fw fa-arrow-right"></i> {{ trigger.temperature }} °C
+          </h5>
         </div>
       </label>
       <div style="
