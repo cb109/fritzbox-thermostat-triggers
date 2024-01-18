@@ -1,4 +1,4 @@
-<article>
+<article id="trigger-{{ trigger.id }}">
   <fieldset style="margin-bottom: 0">
     <div style="display: flex; flex-wrap: wrap; align-items: center;">
       <input
@@ -8,8 +8,14 @@
         role="switch"
         style="transform: scale(1.5); margin-right: 1rem;"
         {% if trigger.enabled %}checked{% endif %}
+        hx-post="/trigger/{{ trigger.id }}/toggle"
+        hx-swap="none"
       >
-      <label for="checkbox-enabled-{{ trigger.id }}">
+      <label
+        for="checkbox-enabled-{{ trigger.id }}"
+        hx-post="/trigger/{{ trigger.id }}/toggle"
+        hx-swap="none"
+      >
         <div class="headings mr-1" style="margin-left: 1rem; margin-bottom: 0;">
           <h4>{{ trigger.thermostat.name }}</h4>
           <h5>{{ trigger.name }}</h5>
@@ -21,9 +27,16 @@
           flex-wrap: wrap;
           justify-content: flex-end;
       ">
-        <small><a href="#" class="secondary outline">Edit</a></small>
-        <small><a href="#" class="secondary outline ml-1">Duplicate</a></small>
-        <small><a href="#" class="secondary outline ml-1">Delete</a></small>
+        <small>
+          <a
+            href="{% url "admin:triggers_trigger_change" trigger.id %}"
+            class="secondary outline"
+          >
+            Edit
+          </a>
+        </small>
+        {% comment %} <small><a href="#" class="secondary outline ml-1">Duplicate</a></small> {% endcomment %}
+        {% comment %} <small><a href="#" class="secondary outline ml-1">Delete</a></small> {% endcomment %}
       </div>
     </div>
   </fieldset>

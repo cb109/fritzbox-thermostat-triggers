@@ -7,7 +7,7 @@
     Once
   </h5>
   {% for trigger in onetime_triggers %}
-    {% include "triggers/trigger_card.html" with trigger=trigger only %}
+    {% include "triggers/_trigger_card.html" with trigger=trigger only %}
   {% endfor %}
 {% endif %}
 
@@ -16,7 +16,7 @@
     Recurring
   </h5>
   {% for trigger in recurring_triggers %}
-    {% include "triggers/trigger_card.html" with trigger=trigger only %}
+    {% include "triggers/_trigger_card.html" with trigger=trigger only %}
   {% endfor %}
 {% endif %}
 
