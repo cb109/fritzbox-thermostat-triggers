@@ -11,6 +11,5 @@ urlpatterns = [
     path("triggers/", views.list_triggers, name="list-triggers"),
     path("trigger/<int:pk>/card", views.trigger_card),
     path("trigger/<int:pk>/toggle", views.toggle_trigger),
-    path("/", RedirectView.as_view(url="triggers/")),
     path("", RedirectView.as_view(url="triggers/")),
 ]
