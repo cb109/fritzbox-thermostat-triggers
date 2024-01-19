@@ -19,37 +19,37 @@
     }
 
     {% if theme == "light" %}
-      /* Green Light scheme (Default) */
+      /* Blue Light scheme (Default) */
       /* Can be forced with data-theme="light" */
       [data-theme="light"],
       :root:not([data-theme="dark"]) {
-        --primary: #43a047;
-        --primary-hover: #388e3c;
-        --primary-focus: rgba(67, 160, 71, 0.125);
+        --primary: #1e88e5;
+        --primary-hover: #1976d2;
+        --primary-focus: rgba(30, 136, 229, 0.125);
         --primary-inverse: #FFF;
       }
 
-      /* Green Dark scheme (Auto) */
+      /* Blue Dark scheme (Auto) */
       /* Automatically enabled if user has Dark mode enabled */
       @media only screen and (prefers-color-scheme: dark) {
         :root:not([data-theme]) {
-          --primary: #43a047;
-          --primary-hover: #4caf50;
-          --primary-focus: rgba(67, 160, 71, 0.25);
+          --primary: #1e88e5;
+          --primary-hover: #2196f3;
+          --primary-focus: rgba(30, 136, 229, 0.25);
           --primary-inverse: #FFF;
         }
       }
 
-      /* Green Dark scheme (Forced) */
+      /* Blue Dark scheme (Forced) */
       /* Enabled if forced with data-theme="dark" */
       [data-theme="dark"] {
-        --primary: #43a047;
-        --primary-hover: #4caf50;
-        --primary-focus: rgba(67, 160, 71, 0.25);
+        --primary: #1e88e5;
+        --primary-hover: #2196f3;
+        --primary-focus: rgba(30, 136, 229, 0.25);
         --primary-inverse: #FFF;
       }
 
-      /* Green (Common styles) */
+      /* Blue (Common styles) */
       :root {
         --form-element-active-border-color: var(--primary);
         --form-element-focus-color: var(--primary-focus);
@@ -116,7 +116,11 @@
     }
 
     .navbar a:hover i {
-      color: #4caf50;
+      {% if theme == "light" %}
+        color: #1e88e5;
+      {% else %}
+        color: #ffb300;
+      {% endif %}
     }
 
     @keyframes fadeOut {
@@ -144,7 +148,14 @@
         <h4 style="margin-bottom: 0; margin-right: auto;">
           <i
             class="fa fa-fa fa-lg fa-fire"
-            style="margin-right: 0.33rem; color: #ffb300;"
+            style="
+              margin-right: 0.33rem;
+              {% if theme == "light" %}
+                color: #1e88e5;
+              {% else %}
+                color: #ffb300;
+              {% endif %}
+            "
           ></i>
           <a
             href="{% url 'list-triggers' %}"

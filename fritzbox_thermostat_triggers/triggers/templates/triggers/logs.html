@@ -1,0 +1,65 @@
+{% extends "triggers/base.html" %}
+
+{% block content %}
+
+  <a
+    href="{% url 'list-triggers' %}"
+    style="font-size: large;"
+  >
+    <i class="fa fa-fa fa-arrow-left mr-1"></i>
+    Back
+  </a>
+
+  <h5 style="opacity: 0.5; margin-top: 0.6rem; margin-bottom: 1.2rem">
+    Logs
+  </h5>
+  <table role="grid">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Trigger</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>
+          {{ log.created_at|date:"d.m.Y" }}<br>
+          <small style="opacity: 0.66">{{ log.created_at|date:"H:i:s" }}</small>
+        </td>
+        <td>
+          <div class="headings" style="margin-bottom: 0;">
+            <h5>{{ log.thermostat.name }}</h5>
+            <h6>
+              {{ log.trigger.name }}
+              <i class="fa fa-fw fa-arrow-right"></i> {{ log.temperature }} °C
+            </h6>
+          </div>
+        </td>
+        <td>
+          <i
+            class="
+              fa fa-fw fa-lg
+              {% if log.no_op %}fa-xmark{% else %}fa-circle-check{% endif %}
+            "
+            style="
+            {% if log.no_op %}
+              color: #e53935;
+            {% else %}
+              {% if theme == "light" %}
+                color: #1e88e5;
+              {% else %}
+                color: #ffb300;
+              {% endif %}
+            {% endif %}
+            "
+          ></i>
+        </td>
+      </tr>
+      {% endfor %}
+    </tfoot>
+  </table>
+
+
+{% endblock%}

@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
 from fritzbox_thermostat_triggers.triggers.models import Trigger
+from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
 
 
 @login_required
@@ -32,6 +33,21 @@ def list_triggers(request):
 
 @login_required
 @require_http_methods(("GET",))
+def list_logs(request):
+    theme : str = request.session.get("theme", "light") # Or 'dark'.
+    logs = ThermostatLog.objects.order_by("-created_at")
+    return render(
+        request,
+        "triggers/logs.html",
+        {
+            "theme": theme,
+            "logs": logs,
+        },
+    )
+
+
+@login_required
+@require_http_methods(("GET",))
 def trigger_card(request, pk: int):
     trigger = Trigger.objects.get(id=pk)
     return render(
@@ -48,7 +64,7 @@ def trigger_card(request, pk: int):
 def toggle_theme(request):
     theme : str = request.session.get("theme", "light") # Or 'dark'.
     request.session["theme"] = "dark" if theme == "light" else "light"
-    return redirect("list-triggers")
+    return redirect(request.META.get("HTTP_REFERER", "list-triggers"))
 
 
 @login_required

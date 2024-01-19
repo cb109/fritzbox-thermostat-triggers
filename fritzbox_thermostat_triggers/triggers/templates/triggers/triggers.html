@@ -3,9 +3,23 @@
 {% block content %}
 
 {% if onetime_triggers %}
-  <h5 style="opacity: 0.5; margin-bottom: 1.2rem">
-    Once
-  </h5>
+  <div style="display: flex; align-items: baseline;">
+    <h5
+      style="
+        opacity: 0.5;
+        margin-bottom: 1.2rem;
+      "
+    >
+      Once
+    </h5>
+    <a
+      class="secondary"
+      style="margin-left: auto;"
+      href="{% url 'list-logs' %}"
+    >
+      Logs
+    </a>
+  </div>
   {% for trigger in onetime_triggers %}
     {% include "triggers/_trigger_card.html" with trigger=trigger only %}
   {% endfor %}
