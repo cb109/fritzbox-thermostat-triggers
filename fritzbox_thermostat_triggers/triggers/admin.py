@@ -71,6 +71,7 @@ class TriggerAdmin(BaseModelAdmin):
 
 
 admin.site.site_header = "Thermostat Triggers"
+admin.site.site_url = "/triggers"
 admin.site.register(Thermostat, ThermostatAdmin)
 admin.site.register(ThermostatLog, ThermostatLogAdmin)
 admin.site.register(Trigger, TriggerAdmin)
