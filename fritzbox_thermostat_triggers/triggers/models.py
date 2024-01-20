@@ -8,6 +8,7 @@ from django.utils import timezone
 
 
 DATETIME_FULL_FORMAT = "%d.%m.%Y at %H:%M"
+DATE_ONLY_FORMAT = "%d.%m.%Y"
 TIME_ONLY_FORMAT = "%H:%M"
 
 
@@ -125,6 +126,12 @@ class Trigger(BaseModel):
     def has_already_executed_within(self, minutes: int) -> bool:
         threshold = timezone.localtime() - timedelta(minutes=minutes)
         return self.logs.filter(created_at__gte=threshold)
+
+    def get_last_triggered_at(self, date_format: str = DATE_ONLY_FORMAT) -> bool:
+        last_log = self.logs.last()
+        if not last_log:
+            return ""
+        return last_log.created_at.strftime(date_format)
 
     def __str__(self):
         formatted_time = self.get_formatted_time(
