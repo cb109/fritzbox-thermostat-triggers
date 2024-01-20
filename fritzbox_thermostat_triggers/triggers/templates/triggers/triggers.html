@@ -11,8 +11,23 @@
         margin-bottom: 1.2rem;
       "
     >
-      Once
-    </h5>
+      <a
+        href="/ui/toggle/once"
+        title="Expand/collapse once triggers"
+      >
+        Once {% if not once_expanded %}({{ onetime_triggers|length }}){% endif %}
+        <i
+          class="
+            ml-1 fa fa-fw
+            {% if once_expanded %}
+              fa-chevron-down
+              {% else %}
+              fa-chevron-up
+            {% endif %}
+          "
+        ></i>
+      </h5>
+    </a>
     <a
       style="margin-left: auto;"
       href="{% url 'list-logs' %}"
@@ -20,9 +35,11 @@
       Logs
     </a>
   </div>
-  {% for trigger in onetime_triggers %}
-    {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
-  {% endfor %}
+  {% if once_expanded %}
+    {% for trigger in onetime_triggers %}
+      {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
+    {% endfor %}
+  {% endif %}
 {% endif %}
 
 {% if recurring_triggers %}
@@ -33,11 +50,28 @@
       margin-bottom: 1.2rem;
     "
   >
-    Weekly
+    <a
+      href="/ui/toggle/weekly"
+      title="Expand/collapse weekly triggers"
+    >
+      Weekly {% if not weekly_expanded %}({{ recurring_triggers|length }}){% endif %}
+      <i
+        class="
+          ml-1 fa fa-fw
+          {% if weekly_expanded %}
+            fa-chevron-down
+            {% else %}
+            fa-chevron-up
+          {% endif %}
+        "
+      ></i>
+    </a>
   </h5>
-  {% for trigger in recurring_triggers %}
-    {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
-  {% endfor %}
+  {% if weekly_expanded %}
+    {% for trigger in recurring_triggers %}
+      {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
+    {% endfor %}
+  {% endif %}
 {% endif %}
 
 {% endblock%}

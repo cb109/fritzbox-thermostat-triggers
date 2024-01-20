@@ -14,7 +14,9 @@ from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
 @login_required
 @require_http_methods(("GET",))
 def list_triggers(request):
-    theme : str = request.session.get("theme", "light") # Or 'dark'.
+    theme: str = request.session.get("theme", "light") # Or 'dark'.
+    once_expanded: bool = request.session.get("once:expanded", True)
+    weekly_expanded: bool = request.session.get("weekly:expanded", True)
 
     triggers = Trigger.objects.order_by("thermostat__name", "time")
     onetime_triggers = [trigger for trigger in triggers if not trigger.recurring]
@@ -24,9 +26,11 @@ def list_triggers(request):
         request,
         "triggers/triggers.html",
         {
-            "theme": theme,
+            "once_expanded": once_expanded,
             "onetime_triggers": onetime_triggers,
             "recurring_triggers": recurring_triggers,
+            "theme": theme,
+            "weekly_expanded": weekly_expanded,
         },
     )
 
@@ -62,8 +66,24 @@ def trigger_card(request, pk: int):
 @login_required
 @require_http_methods(("GET",))
 def toggle_theme(request):
-    theme : str = request.session.get("theme", "light") # Or 'dark'.
+    theme: str = request.session.get("theme", "light") # Or 'dark'.
     request.session["theme"] = "dark" if theme == "light" else "light"
+    return redirect(request.META.get("HTTP_REFERER", "list-triggers"))
+
+
+@login_required
+@require_http_methods(("GET",))
+def toggle_once_expanded(request):
+    once_expanded: bool = request.session.get("once:expanded", True)
+    request.session["once:expanded"] = not once_expanded
+    return redirect(request.META.get("HTTP_REFERER", "list-triggers"))
+
+
+@login_required
+@require_http_methods(("GET",))
+def toggle_weekly_expanded(request):
+    weekly_expanded: bool = request.session.get("weekly:expanded", True)
+    request.session["weekly:expanded"] = not weekly_expanded
     return redirect(request.META.get("HTTP_REFERER", "list-triggers"))
 
 

@@ -10,6 +10,8 @@
     <title>Thermostat Triggers</title>
     <link rel="manifest" href="/manifest.json?v=2" />
     <link rel="stylesheet" href="{% static 'pico.1.5.11.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="{% static 'htmx.1.9.10.min.js' %}"></script>
   </head>
   <style>
     {% comment %} * { outline: 1px solid red; } {% endcomment %}
@@ -194,7 +196,7 @@
         <!-- Light/Dark Theme -->
         <small>
           <a
-            href="/theme/toggle"
+            href="/ui/toggle/theme"
             class="secondary theme-toggle-button {{ theme|default_if_none:"light" }}"
             title="Toggle light/dark theme""
           >
@@ -207,6 +209,4 @@
       {% endblock%}
     </main>
   </body>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <script src="{% static 'htmx.1.9.10.min.js' %}"></script>
 </html>
