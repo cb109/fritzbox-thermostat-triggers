@@ -43,15 +43,12 @@
               fa fa-fw fa-lg
               {% if log.no_op %}fa-xmark{% else %}fa-circle-check{% endif %}
             "
+            title="{% if log.no_op %}This trigger had no effect, e.g. temperature did not need to be changed.{% else %}This trigger had an actual effect on at least one thermostat.{% endif %}"
             style="
             {% if log.no_op %}
-              color: #e53935;
+              color: #bbbbbb;
             {% else %}
-              {% if theme == "light" %}
-                color: #1e88e5;
-              {% else %}
-                color: #ffb300;
-              {% endif %}
+              color: #7cb342;
             {% endif %}
             "
           ></i>

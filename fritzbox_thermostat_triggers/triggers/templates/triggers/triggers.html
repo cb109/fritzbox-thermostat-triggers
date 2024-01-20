@@ -6,14 +6,14 @@
   <div style="display: flex; align-items: baseline;">
     <h5
       style="
-        opacity: 0.5;
+        color: var(--secondary);
+        margin-top: 0.6rem;
         margin-bottom: 1.2rem;
       "
     >
       Once
     </h5>
     <a
-      class="secondary"
       style="margin-left: auto;"
       href="{% url 'list-logs' %}"
     >
@@ -26,7 +26,13 @@
 {% endif %}
 
 {% if recurring_triggers %}
-  <h5 style="opacity: 0.5; margin-top: 1.2rem; margin-bottom: 1.2rem">
+  <h5
+    style="
+      color: var(--secondary);
+      margin-top: 1.2rem;
+      margin-bottom: 1.2rem;
+    "
+  >
     Weekly
   </h5>
   {% for trigger in recurring_triggers %}
