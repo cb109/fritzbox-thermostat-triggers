@@ -29,7 +29,15 @@
       </h5>
     </a>
     <a
-      style="margin-left: auto;"
+      href="{% url 'admin:triggers_trigger_add' %}"
+      style="margin-left: auto; margin-right: 1.5rem;"
+      href="{% url 'list-logs' %}"
+      title="Add new trigger"
+    >
+      <i class="fa fa-fw fa-add"></i>
+      Add
+    </a>
+    <a
       href="{% url 'list-logs' %}"
     >
       Logs
