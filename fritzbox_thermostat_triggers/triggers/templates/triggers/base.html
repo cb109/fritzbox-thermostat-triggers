@@ -102,21 +102,27 @@
     :root {
       --spacing: .66rem;
       --block-spacing-vertical: .66rem;
-      --block-spacing-horizontal: 1.3rem;
+      --block-spacing-horizontal: .85rem;
     }
 
     @media (min-width: 577px) {
       * {
         --spacing: .33rem;
         --block-spacing-vertical: .5rem;
-        --block-spacing-horizontal: 1rem;
+        --block-spacing-horizontal: .66rem;
       }
     }
 
+    .ml-05 {
+      margin-left: calc(var(--spacing) / 2);
+    }
     .ml-1 {
       margin-left: var(--spacing);
     }
 
+    .mr-05 {
+      margin-right: calc(var(--spacing) / 2);
+    }
     .mr-1 {
       margin-right: var(--spacing);
     }

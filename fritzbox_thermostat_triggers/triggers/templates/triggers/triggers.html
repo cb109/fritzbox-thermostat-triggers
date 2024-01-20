@@ -37,7 +37,7 @@
   </div>
   {% if once_expanded %}
     {% for trigger in onetime_triggers %}
-      {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
+      {% include "triggers/_trigger_card.html" with csrf_token=csrf_token trigger=trigger theme=theme only %}
     {% endfor %}
   {% endif %}
 {% endif %}
@@ -69,7 +69,7 @@
   </h5>
   {% if weekly_expanded %}
     {% for trigger in recurring_triggers %}
-      {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
+      {% include "triggers/_trigger_card.html" with csrf_token=csrf_token trigger=trigger theme=theme only %}
     {% endfor %}
   {% endif %}
 {% endif %}

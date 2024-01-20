@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
@@ -129,3 +128,14 @@ def toggle_trigger(request, pk: int):
             "message": ui_update_message,
         },
     )
+
+
+@login_required
+@require_http_methods(("POST",))
+def clone_trigger(request, pk: int):
+    trigger = Trigger.objects.get(id=pk)
+    trigger.id = None
+    trigger.name = ((trigger.name or "") + " copy").strip()
+    trigger.save()
+
+    return redirect(request.META.get("HTTP_REFERER", "list-triggers"))

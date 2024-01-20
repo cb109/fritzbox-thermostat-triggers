@@ -43,7 +43,9 @@
             <h4>{{ trigger.thermostat.name }}</h4>
             <h5>
               {{ trigger.name }}
-              <i class="fa fa-fw fa-arrow-right"></i> {{ trigger.temperature }} °C
+              <span
+                style="white-space: nowrap"
+              ><i class="fa fa-fw fa-arrow-right"></i> {{ trigger.temperature }} °C</span>
             </h5>
           </div>
           <div style="margin-top: 0.25rem; font-size: 0.66rem; opacity: 0.5;">
@@ -70,20 +72,37 @@
       <div style="
           flex-grow: 1;
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           justify-content: flex-end;
       ">
+        <!-- Edit -->
         <small>
           <a
             href="{% url "admin:triggers_trigger_change" trigger.id %}"
-            class="secondary"
+            class="secondary mr-05"
             title="Edit this trigger"
           >
-            <i class="fa fa-fw fa-lg fa-pen-to-square"></i>
+            <i class="fa fa-fw fa-pen"></i>
           </a>
         </small>
-        {% comment %} <small><a href="#" class="secondary outline ml-1">Duplicate</a></small> {% endcomment %}
-        {% comment %} <small><a href="#" class="secondary outline ml-1">Delete</a></small> {% endcomment %}
+        <!-- Clone -->
+        <small>
+          <form
+            id="form-clone-trigger-{{ trigger.id }}"
+            action="{% url "clone-trigger" trigger.id %}"
+            method="post"
+          >
+            {% csrf_token %}
+            <a
+              onclick="document.getElementById('form-clone-trigger-{{ trigger.id }}').submit()"
+              class="secondary"
+              style="cursor: pointer"
+              title="Clone this trigger"
+            >
+              <i class="fa fa-fw fa-regular fa-clone"></i>
+            </a>
+          </form>
+        </small>
       </div>
     </div>
   </fieldset>
