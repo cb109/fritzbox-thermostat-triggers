@@ -11,6 +11,7 @@ urlpatterns = [
     path("trigger/<int:pk>/card", views.trigger_card),
     path("trigger/<int:pk>/toggle", views.toggle_trigger),
     path("trigger/<int:pk>/clone", views.clone_trigger, name="clone-trigger"),
+    path("trigger/<int:pk>/delete", views.delete_trigger, name="delete-trigger"),
     path("ui/toggle/theme", views.toggle_theme),
     path("ui/toggle/once", views.toggle_once_expanded),
     path("ui/toggle/weekly", views.toggle_weekly_expanded),

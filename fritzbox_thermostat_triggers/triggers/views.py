@@ -139,3 +139,12 @@ def clone_trigger(request, pk: int):
     trigger.save()
 
     return redirect(request.META.get("HTTP_REFERER", "list-triggers"))
+
+
+@login_required
+@require_http_methods(("POST",))
+def delete_trigger(request, pk: int):
+    trigger = Trigger.objects.get(id=pk)
+    trigger.delete()
+
+    return redirect(request.META.get("HTTP_REFERER", "list-triggers"))

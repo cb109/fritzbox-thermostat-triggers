@@ -215,4 +215,11 @@
       {% endblock%}
     </main>
   </body>
+  <script>
+    function onDeleteTriggerClicked(triggerId, triggerName) {
+      if (confirm('Really delete "' + triggerName + '?"')) {
+        document.getElementById('form-delete-trigger-' + triggerId).submit();
+      }
+    }
+  </script>
 </html>

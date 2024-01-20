@@ -91,15 +91,35 @@
             id="form-clone-trigger-{{ trigger.id }}"
             action="{% url "clone-trigger" trigger.id %}"
             method="post"
+            style="margin-bottom: 0"
           >
             {% csrf_token %}
             <a
               onclick="document.getElementById('form-clone-trigger-{{ trigger.id }}').submit()"
-              class="secondary"
+              class="secondary mr-1"
               style="cursor: pointer"
               title="Clone this trigger"
             >
               <i class="fa fa-fw fa-regular fa-clone"></i>
+            </a>
+          </form>
+        </small>
+        <!-- Delete -->
+        <small>
+          <form
+            id="form-delete-trigger-{{ trigger.id }}"
+            action="{% url "delete-trigger" trigger.id %}"
+            method="post"
+            style="margin-bottom: 0"
+          >
+            {% csrf_token %}
+            <a
+              onclick="onDeleteTriggerClicked({{ trigger.id }}, '{{ trigger.name }}')"
+              class="secondary"
+              style="cursor: pointer"
+              title="Delete this trigger"
+            >
+              <i class="fa fa-fw fa-trash-can"></i>
             </a>
           </form>
         </small>
