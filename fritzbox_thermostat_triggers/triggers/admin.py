@@ -39,6 +39,7 @@ class ThermostatLogAdmin(BaseModelAdmin):
         "created_at",
         "updated_at",
     )
+    autocomplete_fields = ("thermostat", "trigger")
 
 class TriggerAdmin(BaseModelAdmin):
     list_display = (
@@ -53,6 +54,7 @@ class TriggerAdmin(BaseModelAdmin):
         "updated_at",
     )
     autocomplete_fields = ("thermostat",)
+    search_fields = ("name", "time", "thermostat__name")
 
     def at_time(self, trigger):
         if trigger.recurring:
