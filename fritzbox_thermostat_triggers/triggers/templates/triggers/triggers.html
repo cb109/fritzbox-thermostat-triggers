@@ -2,84 +2,80 @@
 
 {% block content %}
 
-{% if onetime_triggers %}
-  <div style="display: flex; align-items: baseline;">
-    <h5
-      style="
-        color: var(--secondary);
-        margin-top: 0.6rem;
-        margin-bottom: 1.2rem;
-      "
-    >
-      <a
-        href="/ui/toggle/once"
-        title="Expand/collapse once triggers"
-      >
-        Once {% if not once_expanded %}({{ onetime_triggers|length }}){% endif %}
-        <i
-          class="
-            ml-1 fa fa-fw
-            {% if once_expanded %}
-              fa-chevron-down
-              {% else %}
-              fa-chevron-up
-            {% endif %}
-          "
-        ></i>
-      </h5>
-    </a>
-    <a
-      href="{% url 'admin:triggers_trigger_add' %}"
-      style="margin-left: auto; margin-right: 1.5rem;"
-      href="{% url 'list-logs' %}"
-      title="Add new trigger"
-    >
-      <i class="fa fa-fw fa-add"></i>
-      Add
-    </a>
-    <a
-      href="{% url 'list-logs' %}"
-    >
-      Logs
-    </a>
-  </div>
-  {% if once_expanded %}
-    {% for trigger in onetime_triggers %}
-      {% include "triggers/_trigger_card.html" with csrf_token=csrf_token trigger=trigger theme=theme only %}
-    {% endfor %}
-  {% endif %}
-{% endif %}
-
-{% if recurring_triggers %}
+<div style="display: flex; align-items: baseline;">
   <h5
     style="
       color: var(--secondary);
-      margin-top: 1.2rem;
+      margin-top: 0.6rem;
       margin-bottom: 1.2rem;
     "
   >
     <a
-      href="/ui/toggle/weekly"
-      title="Expand/collapse weekly triggers"
+      href="/ui/toggle/once"
+      title="Expand/collapse once triggers"
     >
-      Weekly {% if not weekly_expanded %}({{ recurring_triggers|length }}){% endif %}
+      Once {% if not once_expanded %}({{ onetime_triggers|length }}){% endif %}
       <i
         class="
           ml-1 fa fa-fw
-          {% if weekly_expanded %}
+          {% if once_expanded %}
             fa-chevron-down
             {% else %}
             fa-chevron-up
           {% endif %}
         "
       ></i>
-    </a>
-  </h5>
-  {% if weekly_expanded %}
-    {% for trigger in recurring_triggers %}
-      {% include "triggers/_trigger_card.html" with csrf_token=csrf_token trigger=trigger theme=theme only %}
-    {% endfor %}
-  {% endif %}
+    </h5>
+  </a>
+  <a
+    href="{% url 'admin:triggers_trigger_add' %}"
+    style="margin-left: auto; margin-right: 1.5rem;"
+    href="{% url 'list-logs' %}"
+    title="Add new trigger"
+  >
+    <i class="fa fa-fw fa-add"></i>
+    Add
+  </a>
+  <a
+    href="{% url 'list-logs' %}"
+  >
+    Logs
+  </a>
+</div>
+{% if once_expanded %}
+  {% for trigger in onetime_triggers %}
+    {% include "triggers/_trigger_card.html" with csrf_token=csrf_token trigger=trigger theme=theme only %}
+  {% endfor %}
+{% endif %}
+
+<h5
+  style="
+    color: var(--secondary);
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+  "
+>
+  <a
+    href="/ui/toggle/weekly"
+    title="Expand/collapse weekly triggers"
+  >
+    Weekly {% if not weekly_expanded %}({{ recurring_triggers|length }}){% endif %}
+    <i
+      class="
+        ml-1 fa fa-fw
+        {% if weekly_expanded %}
+          fa-chevron-down
+          {% else %}
+          fa-chevron-up
+        {% endif %}
+      "
+    ></i>
+  </a>
+</h5>
+{% if weekly_expanded %}
+  {% for trigger in recurring_triggers %}
+    {% include "triggers/_trigger_card.html" with csrf_token=csrf_token trigger=trigger theme=theme only %}
+  {% endfor %}
 {% endif %}
 
 {% endblock%}
