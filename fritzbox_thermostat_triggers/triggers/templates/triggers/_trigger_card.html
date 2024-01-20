@@ -18,7 +18,13 @@
     </div>
   {% endif %}
   <fieldset style="margin-bottom: 0">
-    <div style="display: flex; flex-wrap: nowrap; align-items: center;">
+    <div
+      style="
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+      "
+    >
       <input
         id="checkbox-enabled-{{ trigger.id }}"
         type="checkbox"
@@ -37,6 +43,9 @@
         hx-target="#trigger-{{ trigger.id }}"
         hx-swap="outerHTML"
         hx-trigger="click delay:200ms"
+        style="
+          flex-grow: 1;
+        "
       >
         <div style="margin-left: 1rem">
           <div class="headings mr-1" style="margin-bottom: 0;">
@@ -70,16 +79,15 @@
         </div>
       </label>
       <div style="
-          flex-grow: 1;
-          display: flex;
-          flex-wrap: nowrap;
-          justify-content: flex-end;
+        display: flex;
+        justify-content: flex-end;
+        align-items: baseline;
       ">
         <!-- Edit -->
         <small>
           <a
             href="{% url "admin:triggers_trigger_change" trigger.id %}"
-            class="secondary mr-05"
+            class="secondary mr-1"
             title="Edit this trigger"
           >
             <i class="fa fa-fw fa-pen"></i>
