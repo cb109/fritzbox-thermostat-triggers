@@ -53,7 +53,13 @@
               {% else %}
               <span
                 {% if trigger.outdated %}
-                  style="color: #fb8c00"
+                  style="
+                    {% if theme == "light" %}
+                      color: #f4511e;
+                    {% else %}
+                      color: #ffb300
+                    {% endif %}
+                  "
                   title="This is outdated"
                 {% endif %}
               >{{ trigger.get_formatted_time }}</span>

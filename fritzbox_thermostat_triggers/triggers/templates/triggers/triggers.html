@@ -21,7 +21,7 @@
     </a>
   </div>
   {% for trigger in onetime_triggers %}
-    {% include "triggers/_trigger_card.html" with trigger=trigger only %}
+    {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
   {% endfor %}
 {% endif %}
 
@@ -30,7 +30,7 @@
     Weekly
   </h5>
   {% for trigger in recurring_triggers %}
-    {% include "triggers/_trigger_card.html" with trigger=trigger only %}
+    {% include "triggers/_trigger_card.html" with trigger=trigger theme=theme only %}
   {% endfor %}
 {% endif %}
 
