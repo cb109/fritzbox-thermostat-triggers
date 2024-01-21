@@ -1,0 +1,10 @@
+[settings]
+ALLOWED_HOSTS=my.domain.com
+TIME_ZONE=UTC
+
+FRITZBOX_HOST=123456789.myfritz.net
+FRITZBOX_USER=my_user
+FRITZBOX_PASSWORD=my_secret_password
+
+PUSHOVER_USER_KEY=
+PUSHOVER_API_TOKEN=
