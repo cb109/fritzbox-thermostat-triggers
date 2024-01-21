@@ -42,7 +42,8 @@ The ecosystem comes with a decent mobile app to control the thermostats in gener
 - Configure variables for `python-decouple` in a `settings.ini` (or `.env`), see `settings.ini.example`
 - Sync the list of thermostats to the app: `(venv) python manage.py sync_and_trigger_thermostats --sync-only`
 - Run the app: `(venv) python manage.py runserver`
-- Visit the interface at http://localhost:8000
+- Login, logout and most of the CRUD stuff is just done via the Django admin, so make sure to create an admin user: `(venv) python manage.py createsuperuser`
+- Visit the interface at http://localhost:8000 then use the Django admin to create your triggers, click "View Site" within the admin pages to go back to the main UI screen.
 
 ### Production
 
