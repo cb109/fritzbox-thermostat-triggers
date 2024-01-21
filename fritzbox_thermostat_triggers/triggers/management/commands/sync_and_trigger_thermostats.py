@@ -162,14 +162,18 @@ class Command(BaseCommand):
             "--minutes", action="store", default=1, dest="minutes", type=int
         )
         parser.add_argument(
+            "--sync-only", action="store_true", default=False, dest="sync_only"
+        )
+        parser.add_argument(
             "--verbose", action="store_true", default=False, dest="verbose"
         )
 
     def handle(self, *args, **options):
         # This command is assumed to be run every minute as a cronjob.
         # Triggers are skipped if already executed within last interval.
-        interval_minutes = options["minutes"]
-        verbose = options["verbose"]
+        interval_minutes: int = options["minutes"]
+        sync_only: bool = options["sync_only"]
+        verbose: bool = options["verbose"]
 
         now = timezone.localtime()
         within_last_interval = now - timedelta(minutes=interval_minutes)
@@ -185,7 +189,7 @@ class Command(BaseCommand):
 
         # Quick sanity check to save device battery life: If there are
         # no relevant Triggers at all, no need to talk to devices.
-        if not triggers and thermostats_fetched_already:
+        if not sync_only and not triggers and thermostats_fetched_already:
             if verbose:
                 logger.info("No Triggers found, Thermostats seem okay, do nothing")
             return
@@ -196,7 +200,7 @@ class Command(BaseCommand):
             if created and verbose:
                 logger.info(f"New Thermostat created: {thermostat}")
 
-            # Update name to reflect eventual changes from the fritzbox admin UI.
+            # Sync name to reflect eventual changes from the fritzbox admin UI.
             if created or thermostat.name != device.name:
                 old_name = thermostat.name
                 thermostat.name = device.name
@@ -205,6 +209,9 @@ class Command(BaseCommand):
                     logger.info(
                         f"Thermostat name updated: {old_name} -> {thermostat.name}"
                     )
+
+            if sync_only:
+                continue
 
             # Trigger untriggered Triggers that need triggering, d'uh!
             thermostat_triggers = [t for t in triggers if t.thermostat == thermostat]
