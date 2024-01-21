@@ -7,8 +7,8 @@ This app allows to define and toggle triggers that
 ---
 
 <div>
-  <img src="https://i.imgur.com/pltsrhx.png" width="240" title="Light theme" style="margin-right: 24px">
-  <img src="https://i.imgur.com/jhln2Rq.png" width="240" title="Light theme">
+  <img src="https://i.imgur.com/pltsrhx.png" width="400" title="Light theme" style="margin-right: 24px">
+  <img src="https://i.imgur.com/jhln2Rq.png" width="400" title="Light theme">
 </div>
 
 ## Rationale
