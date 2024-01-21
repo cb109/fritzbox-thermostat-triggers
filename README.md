@@ -16,7 +16,7 @@ This app allows to define and toggle triggers that
 A utility web app to allow **more options to control** any Fritz! compatible thermostats
 like [FRITZ!DECT 301](https://avm.de/produkte/smart-home/fritzdect-301/) or [COMECT DECT](https://eurotronic.org/produkte/dect-ule-heizkoerperthermostat/comet-dect/).
 
-The ecosystem comes with a decent mobile app to control the thermostats in general, you can also use the http://fritz.box Smart Home Web UI to define times in which you want to use one between two possible temperatures. This is all fine, but the Web UI for setting the timing isn't quite mobile friendly and doesn't exactly match all use cases I had, which included:
+The ecosystem comes with a [decent mobile app](https://play.google.com/store/apps/details?id=de.avm.android.smarthome&hl=de&gl=US) to control the thermostats in general, you can also use the http://fritz.box Smart Home Web UI to define times in which you want to use one between two possible temperatures. This is all fine, but the Web UI for setting the timing isn't quite mobile friendly and doesn't exactly match all use cases I had, which included:
 
 - Turning off thermostats at night **in case I forgot** to do that myself (I was using cronjobs fo this, which lack an interface and can't quickly be changed from my smartphone)
 - Turning on thermostats at predefined times as a **one-off exception**, e.g. heat up the office tomorrow morning, as I'll be working remotely
