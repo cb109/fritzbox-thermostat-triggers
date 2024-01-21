@@ -1,8 +1,8 @@
 # fritzbox-thermostat-triggers
 
 This app allows to define and toggle triggers that
-- a) set a thermostat to a specified temperature at a specific date and time **once**, or:
-- b) set a thermostat to a specified temperature at a specific time, **on each week day specified**
+- a) set a thermostat to a temperature at a specific date and time **once**, or:
+- b) set a thermostat to a temperature at a specific time, **on each selected week day**
 
 ---
 
