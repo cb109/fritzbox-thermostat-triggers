@@ -242,3 +242,21 @@ class Command(BaseCommand):
                     trigger=trigger,
                     verbose=verbose,
                 )
+
+
+def execute_trigger(trigger:Trigger):
+    no_op: bool = False
+    for device in get_fritzbox_thermostat_devices():
+        thermostat = Thermostat.objects.get(ain=device.ain)
+        if thermostat != trigger.thermostat:
+            continue
+
+        if temperatures_equal(device.target_temperature, trigger.temperature):
+            no_op = True
+        change_thermostat_target_temperature(
+            new_target_temperature=trigger.temperature,
+            no_op=no_op,
+            thermostat=thermostat,
+            trigger=trigger,
+        )
+        break

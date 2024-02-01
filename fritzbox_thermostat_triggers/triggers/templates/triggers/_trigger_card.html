@@ -80,11 +80,33 @@
           </div>
         </div>
       </label>
-      <div style="
-        display: flex;
-        justify-content: flex-end;
-        align-items: baseline;
-      ">
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          align-items: baseline;
+          min-width: 96px;
+        "
+      >
+        <!-- Trigger now -->
+        <small>
+          <form
+            id="form-execute-trigger-{{ trigger.id }}"
+            action="{% url "execute-trigger" trigger.id %}"
+            method="post"
+            style="margin-bottom: 0"
+          >
+            {% csrf_token %}
+            <a
+              onclick="onExecuteTriggerClicked({{ trigger.id }}, '{{ trigger.name }}')"
+              class="secondary mr-1"
+              style="cursor: pointer"
+              title="Execute this trigger now"
+            >
+              <i class="fa fa-fw fa-solid fa-play"></i>
+            </a>
+          </form>
+        </small>
         <!-- Edit -->
         <small>
           <a

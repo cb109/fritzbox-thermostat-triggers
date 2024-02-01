@@ -143,9 +143,14 @@
       66% { opacity: 1; }
       100% { opacity: 0; }
     }
+    .fade-out {
+      animation: fadeOut 5s ease-in;
+      opacity: 0;
+    }
     .fade-out--slow {
       animation: fadeOut 20s ease-in;
       opacity: 0;
+      display: none;
     }
   </style>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
@@ -218,6 +223,12 @@
     function onDeleteTriggerClicked(triggerId, triggerName) {
       if (confirm('Really delete "' + triggerName + '" ?')) {
         document.getElementById('form-delete-trigger-' + triggerId).submit();
+      }
+    }
+
+    function onExecuteTriggerClicked(triggerId, triggerName) {
+      if (confirm('Really execute "' + triggerName + ' now" ?')) {
+        document.getElementById('form-execute-trigger-' + triggerId).submit();
       }
     }
   </script>

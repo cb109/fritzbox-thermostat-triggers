@@ -1,8 +1,11 @@
 from datetime import timedelta
+from typing import Optional
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
@@ -13,6 +16,12 @@ from fritzbox_thermostat_triggers.triggers.models import ThermostatLog
 @login_required
 @require_http_methods(("GET",))
 def list_triggers(request):
+    alert : str = ""
+    executed_trigger_id: Optional[str] = request.GET.get("executed", None)
+    if executed_trigger_id:
+        executed_trigger = Trigger.objects.get(id=executed_trigger_id)
+        alert = f"Executed trigger: {executed_trigger}"
+
     theme: str = request.session.get("theme", "light") # Or 'dark'.
     once_expanded: bool = request.session.get("once:expanded", True)
     weekly_expanded: bool = request.session.get("weekly:expanded", True)
@@ -25,6 +34,7 @@ def list_triggers(request):
         request,
         "triggers/triggers.html",
         {
+            "alert": alert,
             "once_expanded": once_expanded,
             "onetime_triggers": onetime_triggers,
             "recurring_triggers": recurring_triggers,
@@ -143,8 +153,22 @@ def clone_trigger(request, pk: int):
 
 @login_required
 @require_http_methods(("POST",))
+def execute_trigger(request, pk: int):
+    trigger = Trigger.objects.get(id=pk)
+    trigger.execute()
+
+    url: str = reverse("list-triggers") + f"?executed={pk}"
+    return redirect(url)
+
+
+@login_required
+@require_http_methods(("POST",))
 def delete_trigger(request, pk: int):
     trigger = Trigger.objects.get(id=pk)
     trigger.delete()
 
     return redirect(request.META.get("HTTP_REFERER", "list-triggers"))
+
+@require_http_methods(("GET",))
+def nothing(request):
+    return HttpResponse("")

@@ -64,6 +64,10 @@ class Trigger(BaseModel):
     recur_on_saturday = models.BooleanField(default=False)
     recur_on_sunday = models.BooleanField(default=False)
 
+    def execute(self):
+        from fritzbox_thermostat_triggers.triggers.management.commands.sync_and_trigger_thermostats import execute_trigger  # noqa
+        execute_trigger(self)
+
     @property
     def weekday_flags(self):
         return (
