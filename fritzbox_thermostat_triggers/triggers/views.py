@@ -48,7 +48,7 @@ def list_triggers(request):
 @require_http_methods(("GET",))
 def list_logs(request):
     theme : str = request.session.get("theme", "light") # Or 'dark'.
-    logs = ThermostatLog.objects.order_by("-created_at")
+    logs = ThermostatLog.objects.order_by("-created_at")[:300]
     return render(
         request,
         "triggers/logs.html",
