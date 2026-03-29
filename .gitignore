@@ -133,3 +133,4 @@ Activate.ps1
 public/
 settings.ini
 venv/
+uv.lock
