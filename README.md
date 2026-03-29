@@ -35,14 +35,13 @@ The ecosystem comes with a [decent mobile app](https://play.google.com/store/app
 
 - Make sure your thermostats are connected to/known by your Fritzbox
 - Prepare a Fritz user as described [here](https://github.com/hthiery/python-fritzhome#fritzbox-user)
-- Make sure you have Python 3.8+ installed
-- Prepare a virtualenv like: `python -m venv venv`
-- Install dependencies like: `(venv) pip install -r requirements.txt`
-- Initialize the database: `(venv) python manage.py migrate`
+- Make sure you have Python 3.12+ and [uv](https://docs.astral.sh/uv/getting-started/installation/) installed
+- Prepare a virtualenv and install dependencies like like: `uv sync`
+- Initialize the database: `uv run manage.py migrate`
 - Configure variables for `python-decouple` in a `settings.ini` (or `.env`), see `settings.ini.example`
-- Sync the list of thermostats to the app: `(venv) python manage.py sync_and_trigger_thermostats --sync-only`
-- Run the app: `(venv) python manage.py runserver`
-- Login, logout and most of the CRUD stuff is just done via the Django admin, so make sure to create an admin user: `(venv) python manage.py createsuperuser`
+- Sync the list of thermostats to the app: `uv run manage.py sync_and_trigger_thermostats --sync-only`
+- Run the app: `uv run manage.py runserver`
+- Login, logout and most of the CRUD stuff is just done via the Django admin, so make sure to create an admin user: `uv run manage.py createsuperuser`
 - Visit the interface at http://localhost:8000 then use the Django admin to create your triggers, click "View Site" within the admin pages to go back to the main UI screen.
 
 ### Production

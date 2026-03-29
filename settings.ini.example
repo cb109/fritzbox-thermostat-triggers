@@ -1,5 +1,6 @@
 [settings]
 ALLOWED_HOSTS=my.domain.com
+CSRF_TRUSTED_ORIGINS=https://my.domain.com
 TIME_ZONE=UTC
 
 FRITZBOX_HOST=123456789.myfritz.net
